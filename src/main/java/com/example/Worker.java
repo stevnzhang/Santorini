@@ -11,12 +11,18 @@ public final class Worker {
         this.height = height;
     }
 
-    public moveWorker(int row, int col) {
+    /**
+     * Moves the specified worker to the row and col position
+     *
+     * @param row
+     * @param col
+     * @param worker
+     */
+    public moveWorker(int row, int col, Worker worker) {
         if (row < 0 || row > numRows - 1 ||
             col < 0 || col > numCols - 1 ||
             checkLegal(row, col)) {
             System.out.println("Illegal move! Please pick a different location.");
-            System.exit(-1);
         } else {
             this.row = row;
             this.col = col;
