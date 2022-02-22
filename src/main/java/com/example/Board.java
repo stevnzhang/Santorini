@@ -1,34 +1,43 @@
-package com.example;
-
-import cell
-
-public final class Board {
-    private numRows;
-    private numCols;
-    private Cell[][] grid;
-
-    public Board(int numRows, int numCols) {
-        this.numRows = numRows;
-        this.numCols = numCols;
-        this.grid = new Cell[][];
-    }
-
-    /**
-     * Places a tower at the specified location on the board
-     *
-     * @param row
-     * @param col
-     */
-    public placeTower(int row, int col) {
-        Cell position = this.grid[row][col];
-        if (row < 0 || row > numRows - 1 ||
-            col < 0 || col > numCols - 1 ||
-            position.getHeight < 0 || position.getHeight > 3 ||
-            position.occupancy) {
-            System.out.println("Illegal location! Please pick a different location.");
-        } else {
-            Cell res = new Cell(this.grid(position.getHeight + 1)) // NOT SURE ABOUT THIS, HOW TO JUST ADD TO row, col?
-            this.grid[row][col] = res;
-        }
-    }
-}
+//package com.example;
+//
+//public class Board {
+//    private int numRows;
+//    private int numCols;
+//    private Cell[][] board;
+//
+//    public Board(int numRows, int numCols) {
+//        this.numRows = numRows;
+//        this.numCols = numCols;
+//        this.board = new Cell[numRows][numCols];
+//        for (int row = 0; row < this.numRows; row++) {
+//            for (int col = 0; col < this.numCols; col++) {
+//                this.board[row][col] = new Cell(0, false);
+//            }
+//        }
+//    }
+//
+//    public Cell getCell(int row, int col) { return this.board[row][col]; }
+//
+//    public int getNumRows() { return this.numRows; }
+//
+//    public int getNumCols() { return this.numCols; }
+//
+//    public void printBoard() {
+//        for (int row = 0; row < this.numRows; row++) {
+//            for (int col = 0; col < this.numCols; col++) {
+//                System.out.println("[" + board[row][col].getLevels() + "]");
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Places a tower at the specified location on the board
+//     *
+//     * @param row
+//     * @param col
+//     */
+//    public void placeTower(int row, int col) {
+//        Cell cell = this.board[row][col];
+//        cell.addLevel();
+//    }
+//}
