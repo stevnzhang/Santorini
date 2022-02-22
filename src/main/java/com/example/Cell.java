@@ -29,7 +29,7 @@ public class Cell {
      *
      * @param num the numLevels to change the cell to.
      */
-    // Only included this function so that I can separate my addLevel from my occupancy tests
+    // I only included this function for testing so that I can separate my addLevel from my occupancy tests
     public void setLevel(int num) {
         if (0 <= num && num <= DOME_LEVEL) { this.numLevels = num; }
     }
