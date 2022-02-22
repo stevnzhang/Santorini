@@ -4,9 +4,7 @@ public class Player {
     private Worker worker1;
     private Worker worker2;
 
-    public Player() {
-
-    }
+    public Player() {}
 
     public Worker getWorker1() { return this.worker1; }
 
@@ -23,7 +21,9 @@ public class Player {
      */
     public void placeWorker(int row1, int col1, int row2, int col2, Cell[][] board) {
         worker1 = new Worker(row1, col1, 0);
+        board[row1][col1].setOccupied();
         worker2 = new Worker(row2, col2, 0);
+        board[row2][col2].setOccupied();
     }
 
      /**
