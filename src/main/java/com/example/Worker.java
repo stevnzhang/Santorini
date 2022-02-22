@@ -1,6 +1,6 @@
 package com.example;
 
-public final class Worker {
+public class Worker {
     private int row;
     private int col;
     private int height;
@@ -11,29 +11,29 @@ public final class Worker {
         this.height = height;
     }
 
+    public int getRow() { return this.row; }
+
+    public int getCol() { return this.col; }
+
+    public int getHeight() { return this.height; }
+
     /**
      * Moves the specified worker to the row and col position
      *
-     * @param row
-     * @param col
-     * @param worker
+     * @param row the row we want to move the worker to
+     * @param col the col we want to move the worker to
+     * @param worker the worker we want to move
+     * @param board the game board
      */
-    public moveWorker(int row, int col, Worker worker) {
-        if (row < 0 || row > numRows - 1 ||
-            col < 0 || col > numCols - 1 ||
-            checkLegal(row, col)) {
-            System.out.println("Illegal move! Please pick a different location.");
-        } else {
-            this.row = row;
-            this.col = col;
-            this.height = (board[row][col]).getHeight();
-        }
+    public void moveWorker(int row, int col, Worker worker, Cell[][] board) {
+        int originalRow = worker.getRow();
+        int originalCol = worker.getCol();
+        Cell originalCell = board[originalRow][originalCol];
+        originalCell.setUnoccupied();
+        this.row = row;
+        this.col = col;
+        this.height = board[row][col].getLevels();
+        board[row][col].setOccupied();
     }
-
-    public int getRow { return this.row }
-
-    public int getCol { return this.row }
-
-    public int getHeight { return this.row }
 
 }
