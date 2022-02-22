@@ -4,11 +4,6 @@
 # Log file
 *.log
 
-# Visual Stuff
-*.pdf
-*.png
-*.jpg
-
 # Package Files #
 *.jar
 *.war
