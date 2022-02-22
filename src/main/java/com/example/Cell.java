@@ -25,10 +25,20 @@ public class Cell {
     public void setOccupied() { this.occupied = true; }
 
     /**
+     * Changes the level of the cell (ONLY FOR TESTING PURPOSES).
+     *
+     * @param num the numLevels to change the cell to.
+     */
+    // Only included this function so that I can separate my addLevel from my occupancy tests
+    public void setLevel(int num) {
+        if (0 <= num && num <= DOME_LEVEL) { this.numLevels = num; }
+    }
+
+    /**
      * Adds a block on to the cell
      */
     public void addLevel() {
-        this.numLevels += 1;
+        if (!this.hasDome) { this.numLevels += 1; }
         if (this.numLevels == DOME_LEVEL) { this.hasDome = true; }
     }
 
