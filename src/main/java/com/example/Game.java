@@ -11,7 +11,7 @@ public class Game {
     private Player winner;
     private Worker currentWorker;
 
-    // system sequence doesn't need to match implementation (human player vs player class)
+    // system sequence doesn't need to match the implementation (human player vs player class)
     // object model has to match the implementation
 
     private static final int WIN_HEIGHT = 3;
@@ -20,6 +20,7 @@ public class Game {
         this.currentPlayer = 0;
         this.numRows = numRows;
         this.numCols = numCols;
+
         this.board = new Cell[numRows][numCols];
         for (int row = 0; row < this.numRows; row++) {
             for (int col = 0; col < this.numCols; col++) {
