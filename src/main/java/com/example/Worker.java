@@ -22,12 +22,11 @@ public class Worker {
      *
      * @param row the row we want to move the worker to
      * @param col the col we want to move the worker to
-     * @param worker the worker we want to move
      * @param board the game board
      */
-    public void moveWorker(int row, int col, Worker worker, Cell[][] board) {
-        int originalRow = worker.getRow();
-        int originalCol = worker.getCol();
+    public void moveWorker(int row, int col, Cell[][] board) {
+        int originalRow = this.row;
+        int originalCol = this.col;
         Cell originalCell = board[originalRow][originalCol];
         originalCell.setUnoccupied();
         this.row = row;

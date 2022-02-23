@@ -32,6 +32,7 @@ public class Cell {
     // I only included this function for testing so that I can separate my addLevel from my occupancy tests
     public void setLevel(int num) {
         if (0 <= num && num <= DOME_LEVEL) { this.numLevels = num; }
+        if (num == DOME_LEVEL) { this.hasDome = true; }
     }
 
     /**

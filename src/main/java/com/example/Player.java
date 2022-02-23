@@ -4,8 +4,6 @@ public class Player {
     private Worker worker1;
     private Worker worker2;
 
-    public Player() {}
-
     public Worker getWorker1() { return this.worker1; }
 
     public Worker getWorker2() { return this.worker2; }
