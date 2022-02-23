@@ -163,8 +163,8 @@ public class Game {
         if (this.currentWorker != worker) {
             throw new InvalidMoveException("Build has to be adjacent to recently moved worker!");
         } if (checkLegalPlacement(row, col, worker)) {
-            if (this.currentPlayer == 0) { player1.placeTower(row, col, this.board); }
-            else if (this.currentPlayer == 1) { player2.placeTower(row, col, this.board); }
+            if (this.currentPlayer == 0) { worker.placeTower(row, col, this.board); }
+            else if (this.currentPlayer == 1) { worker.placeTower(row, col, this.board); }
             this.currentPlayer = (this.currentPlayer + 1) % 2;
         }
     }

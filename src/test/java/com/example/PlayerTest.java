@@ -42,23 +42,4 @@ public class PlayerTest {
         assertTrue(board[2][2].occupancy());
     }
 
-    @Test
-    public void testPlaceTower() {
-        player.placeTower(0, 0, board);
-        assertEquals(1, board[0][0].getLevels());
-
-        player.placeTower(0, 0, board);
-        assertEquals(2, board[0][0].getLevels());
-
-        player.placeTower(0, 0, board);
-        assertEquals(3, board[0][0].getLevels());
-
-        player.placeTower(0, 0, board);
-        assertEquals(4, board[0][0].getLevels());
-
-        // Doesn't add more to a tower with a dome
-        player.placeTower(0, 0, board);
-        assertEquals(4, board[0][0].getLevels());
-    }
-
 }

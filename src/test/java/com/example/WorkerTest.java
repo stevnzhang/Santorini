@@ -3,8 +3,8 @@ package com.example;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class WorkerTest {
 
@@ -46,5 +46,27 @@ public class WorkerTest {
         worker2.moveWorker(3, 4, board);
         assertFalse(board[2][2].occupancy());
         assertTrue(board[3][4].occupancy());
+    }
+
+    @Test
+    public void testPlaceTower() {
+        player.placeWorker(0, 0, 2, 2, board);
+        Worker worker1 = player.getWorker1();
+
+        worker1.placeTower(0, 0, board);
+        assertEquals(1, board[0][0].getLevels());
+
+        worker1.placeTower(0, 0, board);
+        assertEquals(2, board[0][0].getLevels());
+
+        worker1.placeTower(0, 0, board);
+        assertEquals(3, board[0][0].getLevels());
+
+        worker1.placeTower(0, 0, board);
+        assertEquals(4, board[0][0].getLevels());
+
+        // Doesn't add more to a tower with a dome
+        worker1.placeTower(0, 0, board);
+        assertEquals(4, board[0][0].getLevels());
     }
 }

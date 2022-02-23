@@ -24,16 +24,4 @@ public class Player {
         board[row2][col2].setOccupied();
     }
 
-     /**
-     * Places a tower at the specified location on the board
-     *
-     * @param row the row we want to place our tower on
-     * @param col thw col we want to place our tower on
-     * @param board the game board
-     */
-    public void placeTower(int row, int col, Cell[][] board) {
-        Cell cell = board[row][col];
-        cell.addLevel();
-    }
-
 }
