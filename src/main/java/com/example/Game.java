@@ -11,9 +11,6 @@ public class Game {
     private Player winner;
     private Worker currentWorker;
 
-    // system sequence doesn't need to match the implementation (human player vs player class)
-    // object model has to match the implementation
-
     private static final int WIN_HEIGHT = 3;
 
     public Game(int numRows, int numCols) {
@@ -74,7 +71,7 @@ public class Game {
      * @param row the row to check.
      * @param col the col to check.
      * @param worker the worker we want to move.
-     * @return {@code true} if row, col is a legal move for the worker
+     * @return {@code true} if row, col is a legal move for the worker.
      */
     public boolean checkLegalMove(int row, int col, Worker worker) throws InvalidMoveException {
         basicLegalChecks(row, col); // Will throw an error if not legal row, col
@@ -97,7 +94,7 @@ public class Game {
      * @param row the row to check.
      * @param col the col to check.
      * @param worker the worker we recently moved.
-     * @return {@code true} if row, col is a legal place for a tower
+     * @return {@code true} if row, col is a legal place for a tower.
      */
     public boolean checkLegalPlacement(int row, int col, Worker worker) throws InvalidMoveException {
         int originalRow = worker.getRow();
