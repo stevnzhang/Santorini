@@ -58,7 +58,13 @@ public class GodCard {
 
     /** Win if worker moves down 2 or more levels **/
     public void Pan(int row, int col, Worker worker, Game game) {
-
+        int originalHeight = worker.getHeight();
+        Cell tgtCell = game.getBoard()[row][col];
+        Player currPlayer = game.getCurrentPlayer() == 0 ? game.getPlayer1() : game.getPlayer2();
+        if (originalHeight - tgtCell.getLevels() >= 2) {
+            game.setWinner(currPlayer);
+            game.setGameOver(true);
+        }
     }
 
 }
