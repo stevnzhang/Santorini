@@ -56,7 +56,7 @@ public class GodCard {
 
     }
 
-    /** Win if worker moves down 2+ levels **/
+    /** Win if worker moves down 2 or more levels **/
     public void Pan(int row, int col, Worker worker, Game game) {
 
     }
