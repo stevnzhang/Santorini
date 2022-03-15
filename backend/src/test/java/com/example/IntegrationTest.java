@@ -75,10 +75,8 @@ public class IntegrationTest {
         game.initiateTower(0, 0, worker3);
 
         game.initiateMove(1, 1, worker1, game.getPlayer1());
-        game.initiateTower(0, 0, worker1);
 
-        assertTrue(board[0][0].hasDome());
-        game.gameOver();
+//        assertTrue(board[0][0].hasDome());
         assertTrue(game.getGameOver());
         assertEquals(game.getPlayer1(), game.getWinner());
     }

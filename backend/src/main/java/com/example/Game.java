@@ -150,6 +150,7 @@ public class Game {
                 this.currentWorker = worker;
             }
         }
+        gameOver();
     }
 
     /**
@@ -175,19 +176,12 @@ public class Game {
      * Checks if the game is over.
      */
     public void gameOver() {
-        if (player1.getWorker1().getHeight() == WIN_HEIGHT ||
-            player1.getWorker2().getHeight() == WIN_HEIGHT ||
-            player2.getWorker1().getHeight() == WIN_HEIGHT ||
-            player2.getWorker2().getHeight() == WIN_HEIGHT) {
+        Player player = currentPlayer == 0 ? player1 : player2;
+        if (player.getWorker1().getHeight() == WIN_HEIGHT ||
+            player.getWorker2().getHeight() == WIN_HEIGHT) {
             this.gameOver = true;
         }
-        if (player1.getWorker1().getHeight() == WIN_HEIGHT ||
-            player1.getWorker2().getHeight() == WIN_HEIGHT) {
-            this.winner = player1;
-        } if (player2.getWorker1().getHeight() == WIN_HEIGHT ||
-              player2.getWorker2().getHeight() == WIN_HEIGHT) {
-            this.winner = player2;
-        }
+        if (gameOver) { this.winner = (player == player1 ? player1 : player2); }
     }
 
 }
