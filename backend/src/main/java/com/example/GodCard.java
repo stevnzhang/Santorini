@@ -2,8 +2,10 @@ package com.example;
 
 public class GodCard {
 
-    // ASSUMING THAT ALL GOD CARDS ARE USED ONLY WHEN THEY ARE LEGAL TO BE USED
-    // SO BEFORE--DURING--AFTER THAT PLAYER'S MOVE, BUILD, OR WIN CONDITION PHASES
+    // Avoid coupling, use game.inititateTower instead of worker.placeTower
+    // Create an interface/abstract class (pretty much just game class) that implements the existing moves and placing towers
+    // Create additional god cards that implement the interface/abstract class that override move, tower, win
+    // Player has a GodCard gc which we check at the beginning of each game (similar to isInstance in HW4)
 
     /**
      * Build an additional tower but not on the same space. Has the option to pass (UI).
@@ -13,19 +15,15 @@ public class GodCard {
      * @param worker the worker we moved.
      * @param game the current game.
      */
-    public void demeter(Cell firstTower, Cell secondTower, Worker worker, Game game) throws InvalidMoveException {
-        // Make sure that the tower placements are legal
+    public void demeter(Cell firstTower, Cell secondTower, Worker worker, Game game) throws InvalidMoveException, GameOverException {
         game.checkLegalPlacement(firstTower.getRow(), firstTower.getCol(), worker);
-        game.checkLegalPlacement(secondTower.getRow(), secondTower.getCol(), worker);
-
-        // Make sure the additional tower is not in the same space -- then build
         if (firstTower.getRow() != secondTower.getRow() ||
             firstTower.getCol() != secondTower.getCol()) {
-            worker.placeTower(secondTower.getRow(), secondTower.getCol(), game.getBoard());
+            game.initiateTower(secondTower.getRow(), secondTower.getCol(), worker);
         }
     }
 
-    // Helper function to find the cell behind the pushed worker
+    // Helper function to find the cell the opponent worker will be pushed to.
     private Cell minotaurHelper(Cell src, Cell tgt, Game game) {
         int srcRow = src.getRow();
         int tgtRow = tgt.getRow();
@@ -48,15 +46,15 @@ public class GodCard {
     }
 
     /** Worker may move into an opponent worker's space if their worker can be forced one space
-     *  straight backwards to an unoccupied space of any level. Can only force opponents and
-     *  opponents that are forced onto a 3-level tower do not win.
+     *  straight backwards to an unoccupied space of any level. Can only force opponents to move
+     *  and opponents that are forced onto a 3-level tower do not win.
      *
      *  @param row the row we want to move the worker to.
      *  @param col the col we want to move the worker to.
      *  @param worker the worker we want to move.
      *  @param game the current game.
      */
-    public void minotaur(int row, int col, Worker worker, Game game) throws InvalidMoveException {
+    public void minotaur(int row, int col, Worker worker, Game game) throws InvalidMoveException, InvalidTurnException, GameOverException {
         // Initial variables and legality checks
         int originalRow = worker.getRow();
         int originalCol = worker.getCol();
@@ -66,6 +64,7 @@ public class GodCard {
         game.basicLegalChecks(behind.getRow(), behind.getCol()); // Will throw an error and end game if illegal move, otherwise continue
 
         // Finding the opponent's worker
+        Player currPlayer = game.getCurrentPlayer() == 0 ? game.getPlayer1() : game.getPlayer2();
         Player opponentPlayer = game.getCurrentPlayer() == 0 ? game.getPlayer2() : game.getPlayer1();
         Worker opponentWorker;
         if (opponentPlayer.getWorker1().getRow() == tgt.getRow() &&
@@ -77,9 +76,8 @@ public class GodCard {
         } else { return; }
 
         // Actually moving the workers on the board
-        opponentWorker.moveWorker(behind.getRow(), behind.getCol(), game.getBoard());
-        worker.moveWorker(tgt.getRow(), tgt.getCol(), game.getBoard());
-
+        game.initiateMove(behind.getRow(), behind.getCol(), opponentWorker, opponentPlayer);
+        game.initiateMove(tgt.getRow(), tgt.getCol(), worker, currPlayer);
     }
 
     /**
@@ -90,7 +88,9 @@ public class GodCard {
      * @param worker the worker we want to move.
      * @param game the current game.
      */
-    public void pan(int row, int col, Worker worker, Game game) {
+    public void pan(int row, int col, Worker worker, Game game) throws InvalidMoveException {
+        // Make sure that the moves are legal
+        game.checkLegalMove(row, col, worker);
         int originalHeight = worker.getHeight();
         Cell tgtCell = game.getBoard()[row][col];
         Player currPlayer = game.getCurrentPlayer() == 0 ? game.getPlayer1() : game.getPlayer2();
