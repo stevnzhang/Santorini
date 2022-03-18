@@ -1,15 +1,19 @@
 package com.example;
 
-public class Game {
+public abstract class Game implements GodCard {
     private int currentPlayer;
-    private boolean gameOver;
     private final int numRows;
     private final int numCols;
     private Cell[][] board;
     private Player player1;
+    private GodCard player1GC;
     private Player player2;
-    private Player winner;
+    private GodCard player2GC;
     private Worker currentWorker;
+    private int worker_dy;
+
+    protected boolean gameOver;
+    protected Player winner;
 
     private static final int WIN_HEIGHT = 3;
 
@@ -44,11 +48,9 @@ public class Game {
 
     public Player getWinner() { return this.winner; }
 
-    public void setWinner(Player player) { this.winner = player; } // Not for client-use
-
     public boolean getGameOver() { return this.gameOver; }
 
-    public void setGameOver(boolean val) { this.gameOver = val; } // Not for client-use
+    public int getWorker_dy() { return this.worker_dy; }
 
     /**
      * Checks if the row and col is a legal move on the board.
@@ -133,13 +135,15 @@ public class Game {
     /**
      * Checks if the cell already has a worker in it.
      *
-     * @param row the row we want to move the worker to.
-     * @param col the col we want to move the worker to.
+     * @param positions the positions we want to move our worker to.
      * @param worker the worker we want to move.
      * @param player the current player.
      */
-    public void initiateMove(int row, int col, Worker worker, Player player) throws InvalidMoveException, GameOverException, InvalidTurnException {
+    public void initiateMove(Cell[] positions, Worker worker, Player player) throws InvalidMoveException, GameOverException, InvalidTurnException {
         if (this.gameOver) { throw new GameOverException("Game is over!"); }
+        int row = positions[0].getRow();
+        int col = positions[0].getCol();
+        int height = positions[0].getLevels();
         Player currentPlayer = new Player();
         if (this.currentPlayer == 0) { currentPlayer = player1; }
         else if (this.currentPlayer == 1) { currentPlayer = player2; }
@@ -150,18 +154,20 @@ public class Game {
                 this.currentWorker = worker;
             }
         }
-        gameOver();
+        this.worker_dy = worker.getHeight() - height;
+        gameOver(); // Check for game over after a move has been made
     }
 
     /**
      * Checks if the cell already has a worker in it.
      *
-     * @param row the row we want to place our tower on.
-     * @param col the col we want to place our tower on.
+     * @param towers the towers we want to place on the board.
      * @param worker the worker that recently moved.
      */
-    public void initiateTower(int row, int col, Worker worker) throws InvalidMoveException, GameOverException {
+    public void initiateTower(Cell[] towers, Worker worker) throws InvalidMoveException, GameOverException {
         if (this.gameOver) throw new GameOverException("Game is over!");
+        int row = towers[0].getRow();
+        int col = towers[0].getCol();
         basicLegalChecks(row, col);
         if (this.currentWorker != worker) {
             throw new InvalidMoveException("Build has to be adjacent to recently moved worker!");
@@ -176,12 +182,13 @@ public class Game {
      * Checks if the game is over.
      */
     public void gameOver() {
-        Player player = currentPlayer == 0 ? player1 : player2;
+        Player player = this.currentPlayer == 0 ? this.player1 : this.player2;
         if (player.getWorker1().getHeight() == WIN_HEIGHT ||
             player.getWorker2().getHeight() == WIN_HEIGHT) {
             this.gameOver = true;
         }
-        if (gameOver) { this.winner = (player == player1 ? player1 : player2); }
+        if (this.gameOver) { this.winner = (player == this.player1 ? this.player1 : this.player2); }
+//        else { this.currentPlayer = (this.currentPlayer + 1) % 2; } // Increment the turn
     }
 
 }

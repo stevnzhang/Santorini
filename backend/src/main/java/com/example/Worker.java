@@ -4,6 +4,7 @@ public class Worker {
     private int row;
     private int col;
     private int height;
+    private boolean forced;
 
     public Worker(int row, int col, int height) {
         this.row = row;
@@ -16,6 +17,10 @@ public class Worker {
     public int getCol() { return this.col; }
 
     public int getHeight() { return this.height; }
+
+    public boolean getForced() { return this.forced; }
+
+    public void setForced(boolean val) { this.forced = val; }
 
     /**
      * Moves the specified worker to the row and col position

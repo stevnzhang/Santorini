@@ -3,13 +3,10 @@ package com.example;
 public class Player {
     private Worker worker1;
     private Worker worker2;
-    private GodCard godCard;
 
     public Worker getWorker1() { return this.worker1; }
 
     public Worker getWorker2() { return this.worker2; }
-
-    public GodCard getGodCard() { return this.godCard; }
 
     /**
      * Places a tower at the specified location on the board
