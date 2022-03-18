@@ -1,6 +1,6 @@
 package com.example;
 
-public abstract class Game implements GodCard {
+public class Game implements GodCard {
     private int currentPlayer;
     private final int numRows;
     private final int numCols;
