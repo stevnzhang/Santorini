@@ -2,7 +2,13 @@ package com.example;
 
 public interface GodCard {
 
-    void basicLegalChecks(int row, int col) throws InvalidMoveException;
+    // default allows god card interface to act like an abstract class
+    // move over game implementation to god card
+    // instead of extends game, we should extend the god card class
+    // change Demeter to overriding a getNumMoves function that tells initiateMove how many times to loop (reduces coupling)
+
+    default void basicLegalChecks(int row, int col) throws InvalidMoveException { return; }
+
 
     boolean checkLegalMove(int row, int col, Worker worker) throws InvalidMoveException;
 
