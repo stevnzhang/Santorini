@@ -23,6 +23,6 @@ public final class Main {
 //        workers2[1] = new Worker(1, 1, 0);
 //        Player player1 = new Player(workers1);
 //        Player player2 = new Player(workers2);
-        GodCard game = new Game(NUM_ROWS, NUM_COLS);
+        GodCard game = new Game(Player player1, Player player2);
     }
 }

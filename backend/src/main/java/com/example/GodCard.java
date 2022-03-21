@@ -1,25 +1,145 @@
 package com.example;
 
 public interface GodCard {
+    int NUM_ROWS = 5;
+    int NUM_COLS = 5;
+    int WIN_HEIGHT = 3;
 
-    // default allows god card interface to act like an abstract class
-    // move over game implementation to god card
-    // instead of extends game, we should extend the god card class
-    // change Demeter to overriding a getNumMoves function that tells initiateMove how many times to loop (reduces coupling)
+    /**
+     * Checks if the row and col is a legal move on the board.
+     *
+     * @param row the row to check.
+     * @param col the col to check.
+     * @param board the game board.
+     */
+    default void basicLegalChecks(int row, int col, Cell[][] board) throws InvalidMoveException {
+        if (row < 0 || row > NUM_ROWS - 1 ||
+            col < 0 || col > NUM_COLS - 1) {
+            throw new InvalidMoveException("Out of bounds!");
+        }
+        Cell cell = board[row][col];
+        if (cell.occupancy()) {
+            throw new InvalidMoveException("Location has a worker on it!");
+        } else if (cell.hasDome()) {
+            throw new InvalidMoveException("Location has a dome on it!");
+        }
+    }
 
-    default void basicLegalChecks(int row, int col) throws InvalidMoveException { return; }
+    /**
+     * Checks if the row and col is a legal move for the worker.
+     *
+     * @param row the row to check.
+     * @param col the col to check.
+     * @param worker the worker we want to move.
+     * @param board the game board.
+     * @return {@code true} if row, col is a legal move for the worker.
+     */
+    default boolean checkLegalMove(int row, int col, Worker worker, Cell[][] board) throws InvalidMoveException {
+        basicLegalChecks(row, col, board); // Will throw an error if not legal row, col
+        int originalRow = worker.getRow();
+        int originalCol = worker.getCol();
+        int originalHeight = worker.getHeight();
+        Cell cell = board[row][col];
 
+        if (-1 > originalRow - row || originalRow - row > 1 ||
+                -1 > originalCol - col || originalCol - col > 1) {
+            throw new InvalidMoveException("Move has to be adjacent from current worker!");
+        } else if (originalHeight < cell.getLevels() && cell.getLevels() - originalHeight > 1) {
+            throw new InvalidMoveException("Height of the location is too high!");
+        }
+        return true; // If the system doesn't exit, it passes all checks & it is a legal move
+    }
 
-    boolean checkLegalMove(int row, int col, Worker worker) throws InvalidMoveException;
+    /**
+     * Checks if the row and col is a legal place for the tower.
+     *
+     * @param row the row to check.
+     * @param col the col to check.
+     * @param worker the worker we recently moved.
+     * @param board the game board.
+     * @return {@code true} if row, col is a legal place for a tower.
+     */
+    default boolean checkLegalPlacement(int row, int col, Worker worker, Cell[][] board) throws InvalidMoveException {
+        basicLegalChecks(row, col, board); // Will throw an error if not legal row, col
+        int originalRow = worker.getRow();
+        int originalCol = worker.getCol();
 
-    boolean checkLegalPlacement(int row, int col, Worker worker) throws InvalidMoveException;
+        if (-1 > originalRow - row || originalRow - row > 1 ||
+                -1 > originalCol - col || originalCol - col > 1) {
+            throw new InvalidMoveException("Build has to be adjacent from current worker!");
+        }
+        return true;
+    }
 
-    void initiatePlayer(int row1, int col1, int row2, int col2, Player player) throws InvalidMoveException;
+    /**
+     * Creates the initial workers for the player.
+     *
+     * @param positions the
+     * @param player the player we want to initiate.
+     * @param board the game board.
+     */
+    default void initiatePlayer(Cell[] positions, Player player, Cell[][] board) throws InvalidMoveException {
+        if (positions.length != 2 ) { throw new InvalidMoveException("Have to select only two positions for workers"); }
 
-    void initiateMove(Cell[] positions, Worker worker, Player player) throws InvalidMoveException, GameOverException, InvalidTurnException;
+        int row1 = positions[0].getRow();
+        int col1 = positions[0].getCol();
+        int row2 = positions[1].getRow();
+        int col2 = positions[1].getCol();
+        basicLegalChecks(row1, col1, board);
+        basicLegalChecks(row2, col2, board);
 
-    void initiateTower(Cell[] towers, Worker worker) throws InvalidMoveException, GameOverException;
+        if (row1 == row2 && col1 == col2) {
+            throw new InvalidMoveException("Cannot initialize both workers in the same location!");
+        }
+        if (player == player1) { player1.placeWorker(row1, col1, row2, col2, board); }
+        else if (player == player2) { player2.placeWorker(row1, col1, row2, col2, board); }
+    }
 
-    void gameOver();
+    /**
+     * Checks if the cell already has a worker in it.
+     *
+     * @param positions the positions we want to move our worker to.
+     * @param worker the worker we want to move.
+     * @param player the current player.
+     * @param board the game board.
+     */
+    default void initiateMove(Cell[] positions, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException {
+        int row = positions[0].getRow();
+        int col = positions[0].getCol();
+        if (checkLegalMove(row, col, worker, board)) {
+            if (player.getWorker1() == worker || player.getWorker2() == worker) { // Player is guaranteed to be the currPlayer
+                worker.moveWorker(row, col, board);
+            }
+        }
+    }
+
+    /**
+     * Checks if the cell already has a worker in it.
+     *
+     * @param towers the towers we want to place on the board.
+     * @param worker the worker that recently moved.
+     * @param board the game board.
+     */
+    default void initiateTower(Cell[] towers, Worker worker, Cell[][] board) throws InvalidMoveException {
+        int row = towers[0].getRow();
+        int col = towers[0].getCol();
+        basicLegalChecks(row, col, board);
+        if (checkLegalPlacement(row, col, worker, board)) {
+            worker.placeTower(row, col, board);
+        }
+    }
+
+    /**
+     * Checks if the game is over.
+     *
+     * @param player the current player.
+     */
+    default void gameOver(Player player) { // Player is guaranteed to be the currPlayer
+        if (player.getWorker1().getHeight() == WIN_HEIGHT ||
+            player.getWorker2().getHeight() == WIN_HEIGHT) {
+            gameOver = true;
+        }
+        if (gameOver) { this.winner = (player == this.player1 ? this.player1 : this.player2); }
+    }
 
 }
