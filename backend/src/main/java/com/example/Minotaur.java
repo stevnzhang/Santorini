@@ -24,6 +24,22 @@ public class Minotaur implements GodCard {
         return board[behindRow][behindCol];
     }
 
+    private void pushWorkerHelper(Cell src, Cell tgt, Worker worker, Cell[][] board) {
+        int row = tgt.getRow();
+        int col = tgt.getCol();
+        Cell behind = minotaurHelper(src, tgt, board);
+        Worker opponentWorker = tgt.getWorker();
+
+        // Moves the workers and updates the board state
+        board[opponentWorker.getRow()][opponentWorker.getCol()].setWorker(null);
+        opponentWorker.moveWorker(behind.getRow(), behind.getCol(), board);
+        board[behind.getRow()][behind.getCol()].setWorker(opponentWorker);
+
+        board[worker.getRow()][worker.getCol()].setWorker(null);
+        worker.moveWorker(tgt.getRow(), tgt.getCol(), board);
+        board[row][col].setWorker(worker);
+    }
+
     /**
      * Worker may move into an opponent worker's space if their worker can be forced one space
      * straight backwards to an unoccupied space of any level. Can only force opponents to move
@@ -35,9 +51,8 @@ public class Minotaur implements GodCard {
      * @param board the game board.
      */
     @Override
-    public void initiateMove(Cell[] positions, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException, GameOverException {
+    public void initiateMove(Cell[] positions, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException {
         // Initial variables and legality checks
-        if (getGameOver()) { throw new GameOverException("Game is over!"); }
         int row = positions[0].getRow();
         int col = positions[0].getCol();
         int originalRow = worker.getRow();
@@ -45,22 +60,31 @@ public class Minotaur implements GodCard {
         Cell src = board[originalRow][originalCol];
         Cell tgt = board[row][col];
         Cell behind = minotaurHelper(src, tgt, board);
-        basicLegalChecks(behind.getRow(), behind.getCol(), board); // Will throw an error and end game if illegal move, otherwise continue
+        Worker opponentWorker = tgt.getWorker();
 
-        // Finding the opponent's worker
-        Player opponentPlayer = getCurrentPlayer() == 0 ? getPlayer2() : getPlayer1();
-        Worker opponentWorker;
-        if (opponentPlayer.getWorker1().getRow() == tgt.getRow() &&
-                opponentPlayer.getWorker1().getCol() == tgt.getCol()) {
-            opponentWorker = opponentPlayer.getWorker1();
-        } else if (opponentPlayer.getWorker2().getRow() == tgt.getRow() &&
-                opponentPlayer.getWorker2().getCol() == tgt.getCol()) {
-            opponentWorker = opponentPlayer.getWorker2();
-        } else { return; }
+        if (!tgt.occupancy()) { // Default move - No pushing
+            if (checkLegalMove(row, col, worker, board)) {
+                if (player.getWorker1() == worker || player.getWorker2() == worker) {
+//                    worker.setPrevHeight(worker.getHeight()); Don't need this because we don't need to track dy for pan's power
+                    worker.moveWorker(row, col, board);
+                    board[row][col].setWorker(worker);
+                }
+            }
+//            worker.setForced(false); Don't need this because we don't need to track dy for pan's power
+        } else {
+            // Target cell cannot be out of bounds or have a dome on it, but it can have a worker on it
+            basicLegalChecks(row, col, board);
 
-        // Actually moving the workers on the board
-        opponentWorker.moveWorker(behind.getRow(), behind.getCol(), board);
-        worker.moveWorker(tgt.getRow(), tgt.getCol(), board);
+            // Player cannot push its own worker
+            if (row == opponentWorker.getRow() && col == opponentWorker.getCol()) { throw new InvalidMoveException("Cannot push your own worker!"); }
+
+            // Behind cell cannot be out of bounds, have a dome, or have another player on it
+            basicLegalChecks(behind.getRow(), behind.getCol(), board); // Will throw an error and end game if illegal move, otherwise continue (doesn't check dome)
+
+            // Actually moving the workers on the board and updating the board state
+            pushWorkerHelper(src, tgt, worker, board);
+        }
+
     }
 
 }

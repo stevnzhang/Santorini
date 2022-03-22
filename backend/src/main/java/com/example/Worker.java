@@ -4,6 +4,7 @@ public class Worker {
     private int row;
     private int col;
     private int height;
+    private int prevHeight;
     private boolean forced;
 
     public Worker(int row, int col, int height) {
@@ -18,9 +19,13 @@ public class Worker {
 
     public int getHeight() { return this.height; }
 
-    public boolean getForced() { return this.forced; }
+    public boolean isForced() { return this.forced; }
 
     public void setForced(boolean val) { this.forced = val; }
+
+    public int getPrevHeight() { return this.prevHeight; }
+
+    public void setPrevHeight(int height) { this.prevHeight = height; }
 
     /**
      * Moves the specified worker to the row and col position

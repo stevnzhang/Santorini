@@ -6,6 +6,18 @@ public interface GodCard {
     int WIN_HEIGHT = 3;
 
     /**
+     *  Checks if the row and col has a player on it.
+     *
+     * @param row the row to check.
+     * @param col the col to check.
+     * @param board the game board.
+     */
+    default void playerCheck(int row, int col, Cell[][] board) throws InvalidMoveException {
+        Cell cell = board[row][col];
+        if (cell.occupancy()) { throw new InvalidMoveException("Location has a worker on it!"); }
+    }
+
+    /**
      * Checks if the row and col is a legal move on the board.
      *
      * @param row the row to check.
@@ -18,11 +30,7 @@ public interface GodCard {
             throw new InvalidMoveException("Out of bounds!");
         }
         Cell cell = board[row][col];
-        if (cell.occupancy()) {
-            throw new InvalidMoveException("Location has a worker on it!");
-        } else if (cell.hasDome()) {
-            throw new InvalidMoveException("Location has a dome on it!");
-        }
+        if (cell.hasDome()) { throw new InvalidMoveException("Location has a dome on it!"); }
     }
 
     /**
@@ -36,6 +44,7 @@ public interface GodCard {
      */
     default boolean checkLegalMove(int row, int col, Worker worker, Cell[][] board) throws InvalidMoveException {
         basicLegalChecks(row, col, board); // Will throw an error if not legal row, col
+        playerCheck(row, col, board);
         int originalRow = worker.getRow();
         int originalCol = worker.getCol();
         int originalHeight = worker.getHeight();
@@ -61,6 +70,7 @@ public interface GodCard {
      */
     default boolean checkLegalPlacement(int row, int col, Worker worker, Cell[][] board) throws InvalidMoveException {
         basicLegalChecks(row, col, board); // Will throw an error if not legal row, col
+        playerCheck(row, col, board);
         int originalRow = worker.getRow();
         int originalCol = worker.getCol();
 
@@ -87,12 +97,13 @@ public interface GodCard {
         int col2 = positions[1].getCol();
         basicLegalChecks(row1, col1, board);
         basicLegalChecks(row2, col2, board);
+        playerCheck(row1, col1, board);
+        playerCheck(row2, col2, board);
 
         if (row1 == row2 && col1 == col2) {
             throw new InvalidMoveException("Cannot initialize both workers in the same location!");
         }
-        if (player == player1) { player1.placeWorker(row1, col1, row2, col2, board); }
-        else if (player == player2) { player2.placeWorker(row1, col1, row2, col2, board); }
+        player.placeWorker(row1, col1, row2, col2, board);
     }
 
     /**
@@ -108,9 +119,13 @@ public interface GodCard {
         int col = positions[0].getCol();
         if (checkLegalMove(row, col, worker, board)) {
             if (player.getWorker1() == worker || player.getWorker2() == worker) { // Player is guaranteed to be the currPlayer
+                worker.setPrevHeight(worker.getHeight());
+                board[worker.getRow()][worker.getCol()].setWorker(null);
                 worker.moveWorker(row, col, board);
+                board[row][col].setWorker(worker);
             }
         }
+        worker.setForced(false); // Current worker just moved, so they have not been forced to their new position
     }
 
     /**
@@ -124,6 +139,7 @@ public interface GodCard {
         int row = towers[0].getRow();
         int col = towers[0].getCol();
         basicLegalChecks(row, col, board);
+        playerCheck(row, col, board);
         if (checkLegalPlacement(row, col, worker, board)) {
             worker.placeTower(row, col, board);
         }
@@ -134,12 +150,14 @@ public interface GodCard {
      *
      * @param player the current player.
      */
-    default void gameOver(Player player) { // Player is guaranteed to be the currPlayer
-        if (player.getWorker1().getHeight() == WIN_HEIGHT ||
-            player.getWorker2().getHeight() == WIN_HEIGHT) {
-            gameOver = true;
+    default boolean gameOver(Player player) { // Player is guaranteed to be the currPlayer
+        Worker worker1 = player.getWorker1();
+        Worker worker2 = player.getWorker2();
+        if ((worker1.getHeight() == WIN_HEIGHT && !worker1.isForced()) ||
+            (worker2.getHeight() == WIN_HEIGHT && !worker2.isForced())) {
+            return true;
         }
-        if (gameOver) { this.winner = (player == this.player1 ? this.player1 : this.player2); }
+        return false;
     }
 
 }

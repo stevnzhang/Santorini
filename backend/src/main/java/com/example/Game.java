@@ -3,8 +3,15 @@ package com.example;
 public class Game {
     // Strategy easier to implement (but code duplication)
     // Template harder to implement (but code reusability)
-    private final int numRows = 5;
-    private final int numCols = 5;
+
+    // Demeter skip option, how does that work because rn I have it so that it asks for more than one position
+    // initiatePlayer?
+
+    // move or build states, builtAlready state for Demeter
+    // can have parameters that are not used by the base game (can use default values, obj has getter methods)
+
+    private final int NUM_ROWS = 5;
+    private final int NUM_COLS = 5;
     private Cell[][] board;
     private Player player1;
     private Player player2;
@@ -12,28 +19,27 @@ public class Game {
     private GodCard player2GC;
     private Player currentPlayer;
     private Worker currentWorker;
-    private int worker_dy;
     private boolean gameOver;
     private Player winner;
 
-    public Game(Player p1, Player p2, GodCard gc1, GodCard gc2) {
+    public Game(Player p1, GodCard gc1, Player p2, GodCard gc2) {
         this.currentPlayer = p1;
         this.player1 = p1;
         this.player2 = p2;
         this.player1GC = gc1;
         this.player2GC = gc2;
 
-        this.board = new Cell[numRows][numCols];
-        for (int row = 0; row < this.numRows; row++) {
-            for (int col = 0; col < this.numCols; col++) {
+        this.board = new Cell[NUM_ROWS][NUM_COLS];
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
                 this.board[row][col] = new Cell(0, false);
             }
         }
     }
 
-    public int getNumRows() { return this.numRows; }
+    public int getNumRows() { return NUM_ROWS; }
 
-    public int getNumCols() { return this.numCols; }
+    public int getNumCols() { return NUM_COLS; }
 
     public Player getPlayer1() { return this.player1; }
 
@@ -56,34 +62,34 @@ public class Game {
 
     public boolean getGameOver() { return this.gameOver; }
 
-    public int getWorker_dy() { return this.worker_dy; }
-
-    public void initiateCardMove(Cell[] positions, Worker worker, Player player, Cell[][] board) throws InvalidTurnException, GameOverException, InvalidMoveException {
+    public void initiateCardMove(Cell[] positions, Worker worker, Player player) throws InvalidTurnException, GameOverException, InvalidMoveException {
         if (this.gameOver) { throw new GameOverException("Game is over!"); }
         if (this.currentPlayer != player) { throw new InvalidTurnException("It's not your turn!"); }
 
         GodCard card = (player == this.player1 ? this.player1GC : this.player2GC);
-        card.initiateMove(positions, worker, player, board);
-
-        int height = positions[0].getLevels();
-        this.worker_dy = worker.getHeight() - height;
-        card.gameOver(player); // Check for game over after a move has been made
+        card.initiateMove(positions, worker, player, this.board);
+        this.currentWorker = worker;
     }
 
-    public void initiateCardTower(Cell[] positions, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, GameOverException {
+    public void initiateCardTower(Cell[] positions, Worker worker, Player player) throws InvalidMoveException, GameOverException {
         if (this.gameOver) { throw new GameOverException("Game is over!"); }
         if (this.currentWorker != worker) { throw new InvalidMoveException("Build has to be adjacent to recently moved worker!"); }
 
         GodCard card = (player == this.player1 ? this.player1GC : this.player2GC);
-        card.initiateTower(positions, worker, board);
-        this.currentWorker = worker;
+        card.initiateTower(positions, worker, this.board);
     }
 
     public void gameOverCard(Player player) {
         if (this.currentPlayer != player) { return; }
 
         GodCard card = (player == this.player1 ? this.player1GC : this.player2GC);
-        card.gameOver(player);
+        if (card.gameOver(player)) {
+            this.winner = player;
+            this.gameOver = true;
+        }
+
     }
+
+    public void initiatePlayer() {}
 
 }

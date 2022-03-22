@@ -6,6 +6,7 @@ public class Cell {
     private int numLevels;
     private boolean hasDome;
     private boolean occupied;
+    private Worker worker;
 
     private static final int DOME_LEVEL = 4;
 
@@ -23,6 +24,10 @@ public class Cell {
     public void setUnoccupied() { this.occupied = false; }
 
     public void setOccupied() { this.occupied = true; }
+
+    public Worker getWorker() { return this.worker; }
+
+    public void setWorker(Worker worker) { this.worker = worker; }
 
     /**
      * Changes the level of the cell (ONLY FOR TESTING PURPOSES).
