@@ -24,13 +24,13 @@ public class Minotaur implements GodCard {
         return board[behindRow][behindCol];
     }
 
+    // Helper function that moves the workers and updates the board state (To make code more readable and reusable)
     private void pushWorkerHelper(Cell src, Cell tgt, Worker worker, Cell[][] board) {
         int row = tgt.getRow();
         int col = tgt.getCol();
         Cell behind = minotaurHelper(src, tgt, board);
         Worker opponentWorker = tgt.getWorker();
 
-        // Moves the workers and updates the board state
         board[opponentWorker.getRow()][opponentWorker.getCol()].setWorker(null);
         opponentWorker.moveWorker(behind.getRow(), behind.getCol(), board);
         board[behind.getRow()][behind.getCol()].setWorker(opponentWorker);
@@ -70,7 +70,7 @@ public class Minotaur implements GodCard {
                     board[row][col].setWorker(worker);
                 }
             }
-//            worker.setForced(false); Don't need this because we don't need to track dy for pan's power
+//            worker.setForced(false); Don't need this because we don't have Pan card
         } else {
             // Target cell cannot be out of bounds or have a dome on it, but it can have a worker on it
             basicLegalChecks(row, col, board);

@@ -4,11 +4,7 @@ public class Game {
     // Strategy easier to implement (but code duplication)
     // Template harder to implement (but code reusability)
 
-    // Demeter skip option, how does that work because rn I have it so that it asks for more than one position
-    // initiatePlayer?
-
-    // move or build states, builtAlready state for Demeter
-    // can have parameters that are not used by the base game (can use default values, obj has getter methods)
+    // InitiatePlayer?
 
     private final int NUM_ROWS = 5;
     private final int NUM_COLS = 5;
@@ -61,6 +57,7 @@ public class Game {
     public Player getWinner() { return this.winner; }
 
     public boolean getGameOver() { return this.gameOver; }
+
 
     public void initiateCardMove(Cell[] positions, Worker worker, Player player) throws InvalidTurnException, GameOverException, InvalidMoveException {
         if (this.gameOver) { throw new GameOverException("Game is over!"); }

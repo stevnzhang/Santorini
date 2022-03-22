@@ -11,21 +11,20 @@ public class Demeter implements GodCard {
      * @param board the game board.
      */
     @Override
-    public void initiateTower(Cell[] towers, Worker worker, Cell[][] board) throws InvalidMoveException, GameOverException {
-        if (getGameOver()) throw new GameOverException("Game is over!");
-
+    public void initiateTower(Cell[] towers, Worker worker, Cell[][] board) throws InvalidMoveException {
         // First tower legality checks and placement
         Cell firstTower = towers[0];
-        checkLegalPlacement(firstTower.getRow(), firstTower.getCol(), worker);
-        worker.placeTower(firstTower.getRow(), firstTower.getCol(), board);
+        if (checkLegalPlacement(firstTower.getRow(), firstTower.getCol(), worker, board)) {
+            worker.placeTower(firstTower.getRow(), firstTower.getCol(), board);
+        }
 
         // Second tower legality checks and placement
         if (towers.length > 1) { // Guarantee no indexing out of bounds
             Cell secondTower = towers[1];
-            checkLegalPlacement(secondTower.getRow(), secondTower.getCol(), worker);
+            checkLegalPlacement(secondTower.getRow(), secondTower.getCol(), worker, board);
             if (firstTower.getRow() != secondTower.getRow() ||
                 firstTower.getCol() != secondTower.getCol()) {
-                worker.placeTower(secondTower.getRow(), secondTower.getCol(), getBoard());
+                worker.placeTower(secondTower.getRow(), secondTower.getCol(), board);
             }
         }
     }
