@@ -45,16 +45,16 @@ public class Minotaur implements GodCard {
      * straight backwards to an unoccupied space of any level. Can only force opponents to move
      * and opponents that are forced onto a 3-level tower do not win.
      *
-     * @param positions the positions we want to move our worker to.
+     * @param position the position we want to move our worker to.
      * @param worker the worker we want to move.
      * @param player the current player.
      * @param board the game board.
      */
     @Override
-    public void initiateMove(Cell[] positions, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException {
+    public void initiateMove(Cell position, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException {
         // Initial variables and legality checks
-        int row = positions[0].getRow();
-        int col = positions[0].getCol();
+        int row = position.getRow();
+        int col = position.getCol();
         int originalRow = worker.getRow();
         int originalCol = worker.getCol();
         Cell src = board[originalRow][originalCol];
@@ -79,7 +79,7 @@ public class Minotaur implements GodCard {
             if (row == opponentWorker.getRow() && col == opponentWorker.getCol()) { throw new InvalidMoveException("Cannot push your own worker!"); }
 
             // Behind cell cannot be out of bounds, have a dome, or have another player on it
-            basicLegalChecks(behind.getRow(), behind.getCol(), board); // Will throw an error and end game if illegal move, otherwise continue (doesn't check dome)
+            basicLegalChecks(behind.getRow(), behind.getCol(), board); // Throws error and end game if illegal move, otherwise continue (doesn't check dome)
 
             // Actually moving the workers on the board and updating the board state
             pushWorkerHelper(src, tgt, worker, board);

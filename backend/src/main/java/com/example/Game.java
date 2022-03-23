@@ -6,8 +6,8 @@ public class Game {
 
     // InitiatePlayer?
 
-    private final int NUM_ROWS = 5;
-    private final int NUM_COLS = 5;
+    private final int numRows = 5;
+    private final int numCols = 5;
     private Cell[][] board;
     private Player player1;
     private Player player2;
@@ -25,17 +25,17 @@ public class Game {
         this.player1GC = gc1;
         this.player2GC = gc2;
 
-        this.board = new Cell[NUM_ROWS][NUM_COLS];
-        for (int row = 0; row < NUM_ROWS; row++) {
-            for (int col = 0; col < NUM_COLS; col++) {
+        this.board = new Cell[numRows][numCols];
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
                 this.board[row][col] = new Cell(0, false);
             }
         }
     }
 
-    public int getNumRows() { return NUM_ROWS; }
+    public int getNumRows() { return numRows; }
 
-    public int getNumCols() { return NUM_COLS; }
+    public int getNumCols() { return numCols; }
 
     public Player getPlayer1() { return this.player1; }
 
@@ -59,21 +59,21 @@ public class Game {
     public boolean getGameOver() { return this.gameOver; }
 
 
-    public void initiateCardMove(Cell[] positions, Worker worker, Player player) throws InvalidTurnException, GameOverException, InvalidMoveException {
+    public void initiateCardMove(Cell position, Worker worker, Player player) throws InvalidTurnException, GameOverException, InvalidMoveException {
         if (this.gameOver) { throw new GameOverException("Game is over!"); }
         if (this.currentPlayer != player) { throw new InvalidTurnException("It's not your turn!"); }
 
         GodCard card = (player == this.player1 ? this.player1GC : this.player2GC);
-        card.initiateMove(positions, worker, player, this.board);
+        card.initiateMove(position, worker, player, this.board);
         this.currentWorker = worker;
     }
 
-    public void initiateCardTower(Cell[] positions, Worker worker, Player player) throws InvalidMoveException, GameOverException {
+    public void initiateCardTower(Cell position, Worker worker, Player player) throws InvalidMoveException, GameOverException {
         if (this.gameOver) { throw new GameOverException("Game is over!"); }
         if (this.currentWorker != worker) { throw new InvalidMoveException("Build has to be adjacent to recently moved worker!"); }
 
         GodCard card = (player == this.player1 ? this.player1GC : this.player2GC);
-        card.initiateTower(positions, worker, this.board);
+        card.initiateTower(position, worker, this.board);
     }
 
     public void gameOverCard(Player player) {

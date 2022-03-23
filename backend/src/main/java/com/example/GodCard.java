@@ -109,14 +109,14 @@ public interface GodCard {
     /**
      * Checks if the cell already has a worker in it.
      *
-     * @param positions the positions we want to move our worker to.
+     * @param position the position we want to move our worker to.
      * @param worker the worker we want to move.
      * @param player the current player.
      * @param board the game board.
      */
-    default void initiateMove(Cell[] positions, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException {
-        int row = positions[0].getRow();
-        int col = positions[0].getCol();
+    default void initiateMove(Cell position, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException {
+        int row = position.getRow();
+        int col = position.getCol();
         if (checkLegalMove(row, col, worker, board)) {
             if (player.getWorker1() == worker || player.getWorker2() == worker) { // Player is guaranteed to be the currPlayer
                 worker.setPrevHeight(worker.getHeight());
@@ -131,13 +131,13 @@ public interface GodCard {
     /**
      * Checks if the cell already has a worker in it.
      *
-     * @param towers the towers we want to place on the board.
+     * @param tower the tower we want to place on the board.
      * @param worker the worker that recently moved.
      * @param board the game board.
      */
-    default void initiateTower(Cell[] towers, Worker worker, Cell[][] board) throws InvalidMoveException {
-        int row = towers[0].getRow();
-        int col = towers[0].getCol();
+    default void initiateTower(Cell tower, Worker worker, Cell[][] board) throws InvalidMoveException {
+        int row = tower.getRow();
+        int col = tower.getCol();
         basicLegalChecks(row, col, board);
         playerCheck(row, col, board);
         if (checkLegalPlacement(row, col, worker, board)) {
@@ -149,6 +149,7 @@ public interface GodCard {
      * Checks if the game is over.
      *
      * @param player the current player.
+     * @return {@code true} if player has any workers at win height.
      */
     default boolean gameOver(Player player) { // Player is guaranteed to be the currPlayer
         Worker worker1 = player.getWorker1();

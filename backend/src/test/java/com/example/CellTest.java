@@ -14,7 +14,7 @@ public class CellTest {
 
     @Before
     public void setUp() {
-        game = new Game(5, 5);
+        game = new Game(new Player(), new NoCard(), new Player(), new NoCard());
         board = game.getBoard();
     }
 

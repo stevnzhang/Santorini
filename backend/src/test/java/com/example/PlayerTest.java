@@ -15,9 +15,9 @@ public class PlayerTest {
 
     @Before
     public void setUp() {
-        game = new Game(5, 5);
+        game = new Game(new Player(), new NoCard(), new Player(), new NoCard());
         board = game.getBoard();
-        player = new Player();
+        player = game.getPlayer1();
     }
 
     // Cannot check a lot of tests (like correct thrown exception) since this requires game calls + checks

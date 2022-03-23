@@ -15,6 +15,13 @@ public class Cell {
         this.occupied = occupied;
     }
 
+    public Cell(int row, int col) {
+        this.row = row;
+        this.col = col;
+        this.numLevels = 0;
+        this.occupied = false;
+    }
+
     public int getRow() { return this.row; }
 
     public int getCol() { return this.col; }
