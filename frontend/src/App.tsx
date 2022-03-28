@@ -1,9 +1,11 @@
 import Handlebars from 'handlebars'
-import { Component } from 'react'
+import React, { Component } from 'react'
 import './App.css'
 
 var oldHref = "http://localhost:3000"
-var turn = 0
+var turn = 1
+
+// If board resets to initial state (something is wrong here)
 
 interface Cell {
   text: String;
@@ -26,17 +28,33 @@ class App extends Component<Props, Cells> {
     this.state = {
       cells: [
         { text: "", clazz: "playable", link: "/play?x=0&y=0" },
-        { text: "", clazz: "playable", link: "/play?x=1&y=0" },
-        { text: "", clazz: "playable", link: "/play?x=2&y=0" },
         { text: "", clazz: "playable", link: "/play?x=0&y=1" },
-        { text: "", clazz: "playable", link: "/play?x=1&y=1" },
-        { text: "", clazz: "playable", link: "/play?x=2&y=1" },
         { text: "", clazz: "playable", link: "/play?x=0&y=2" },
+        { text: "", clazz: "playable", link: "/play?x=0&y=3" },
+        { text: "", clazz: "playable", link: "/play?x=0&y=4" },
+        { text: "", clazz: "playable", link: "/play?x=1&y=0" },
+        { text: "", clazz: "playable", link: "/play?x=1&y=1" },
         { text: "", clazz: "playable", link: "/play?x=1&y=2" },
+        { text: "", clazz: "playable", link: "/play?x=1&y=3" },
+        { text: "", clazz: "playable", link: "/play?x=1&y=4" },
+        { text: "", clazz: "playable", link: "/play?x=2&y=0" },
+        { text: "", clazz: "playable", link: "/play?x=2&y=1" },
         { text: "", clazz: "playable", link: "/play?x=2&y=2" },
+        { text: "", clazz: "playable", link: "/play?x=2&y=3" },
+        { text: "", clazz: "playable", link: "/play?x=2&y=4" },
+        { text: "", clazz: "playable", link: "/play?x=3&y=0" },
+        { text: "", clazz: "playable", link: "/play?x=3&y=1" },
+        { text: "", clazz: "playable", link: "/play?x=3&y=2" },
+        { text: "", clazz: "playable", link: "/play?x=3&y=3" },
+        { text: "", clazz: "playable", link: "/play?x=3&y=4" },
+        { text: "", clazz: "playable", link: "/play?x=4&y=0" },
+        { text: "", clazz: "playable", link: "/play?x=4&y=1" },
+        { text: "", clazz: "playable", link: "/play?x=4&y=2" },
+        { text: "", clazz: "playable", link: "/play?x=4&y=3" },
+        { text: "", clazz: "playable", link: "/play?x=4&y=4" }
       ],
       template: this.loadTemplate(),
-      instructions: "It is Player 0's turn"
+      instructions: "It is Player 1's turn"
     };
   }
 
@@ -73,14 +91,16 @@ class App extends Component<Props, Cells> {
   }
 
   async newGame() {
+    console.log("NEWGAME")
     const response = await fetch("newgame");
     const json = await response.json();
 
     const newCells: Array<Cell> = this.convertToCell(json);
-    this.setState({ cells: newCells, instructions: "It is Player 0's turn"})
+    this.setState({ cells: newCells, instructions: "It is Player 1's turn"})
   }
 
   async play(url: String) {
+    console.log("PLAYING")
     const href = "play?" + url.split("?")[1];
     const response = await fetch(href);
     const json = await response.json();
@@ -92,8 +112,10 @@ class App extends Component<Props, Cells> {
     this.setState({ cells: newCells, instructions: instr })
   }
 
-  async undo() {
-    const response = await fetch("undo");
+  async pickworker(url: String) {
+    console.log("PICKING WORKER")
+    const href = "pickworker?" + url.split("?")[1];
+    const response = await fetch(href);
     const json = await response.json();
 
     const newCells: Array<Cell> = this.convertToCell(json);
@@ -104,23 +126,14 @@ class App extends Component<Props, Cells> {
   }
 
   async switch() {
-    if (
-      window.location.href === "http://localhost:3000/newgame" &&
-      oldHref !== window.location.href
-    ) {
-      this.newGame();
-      oldHref = window.location.href;
-    } else if (
-      window.location.href.split("?")[0] === "http://localhost:3000/play" &&
-      oldHref !== window.location.href
-    ) {
+    if (window.location.href === "http://localhost:3000/newgame" && oldHref !== window.location.href) {
+        this.newGame();
+        oldHref = window.location.href;
+    } else if (window.location.href.split("?")[0] === "http://localhost:3000/play" && oldHref !== window.location.href) {
       this.play(window.location.href);
       oldHref = window.location.href;
-    } else if (
-      window.location.href === "http://localhost:3000/undo" &&
-      oldHref !== window.location.href
-    ) {
-      this.undo();
+    } else if (window.location.href.split("?")[0] === "http://localhost:3000/pickworker" && oldHref !== window.location.href) {
+      this.pickworker(window.location.href);
       oldHref = window.location.href;
     }
   };
