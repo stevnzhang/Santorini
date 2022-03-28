@@ -82,31 +82,6 @@ public interface GodCard {
     }
 
     /**
-     * Creates the initial workers for the player.
-     *
-     * @param positions the
-     * @param player the player we want to initiate.
-     * @param board the game board.
-     */
-    default void initiatePlayer(Cell[] positions, Player player, Cell[][] board) throws InvalidMoveException {
-        if (positions.length != 2 ) { throw new InvalidMoveException("Have to select only two positions for workers"); }
-
-        int row1 = positions[0].getRow();
-        int col1 = positions[0].getCol();
-        int row2 = positions[1].getRow();
-        int col2 = positions[1].getCol();
-        basicLegalChecks(row1, col1, board);
-        basicLegalChecks(row2, col2, board);
-        playerCheck(row1, col1, board);
-        playerCheck(row2, col2, board);
-
-        if (row1 == row2 && col1 == col2) {
-            throw new InvalidMoveException("Cannot initialize both workers in the same location!");
-        }
-        player.placeWorker(row1, col1, row2, col2, board);
-    }
-
-    /**
      * Checks if the cell already has a worker in it.
      *
      * @param position the position we want to move our worker to.
@@ -134,8 +109,9 @@ public interface GodCard {
      * @param tower the tower we want to place on the board.
      * @param worker the worker that recently moved.
      * @param board the game board.
+     * @param state the current state of a player's turn
      */
-    default void initiateTower(Cell tower, Worker worker, Cell[][] board) throws InvalidMoveException {
+    default void initiateTower(Cell tower, Worker worker, Cell[][] board, String state) throws InvalidMoveException {
         int row = tower.getRow();
         int col = tower.getCol();
         basicLegalChecks(row, col, board);

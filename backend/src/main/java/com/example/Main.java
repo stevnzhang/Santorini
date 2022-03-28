@@ -15,11 +15,11 @@ public final class Main {
     public static void main(String[] args) throws IOException { // Should have CLI here
         System.out.println("Start");
 
-        Player player1 = new Player();
-        Player player2 = new Player();
+        Player player1 = new Player("1");
+        Player player2 = new Player("2");
         GodCard minotaur = new Minotaur();
         GodCard demeter = new Demeter();
         GodCard pan = new Pan();
-        Game game = new Game(player1, minotaur, player2, pan);
+        Game game = new Game(player1, player2);
     }
 }
