@@ -52,6 +52,27 @@ public class App extends NanoHTTPD {
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
             }
+        } else if (uri.equals("/pickworker")) {
+                try {
+                    Cell workerPosition = game.getBoard()[Integer.parseInt(params.get("x"))][Integer.parseInt(params.get("y"))];
+                    Worker worker = workerPosition.getWorker();
+                    if (worker == null) { throw new InvalidMoveException("Have to select a worker first"); }
+                    if (worker != currentPlayer.getWorker1() && worker != currentPlayer.getWorker2()) {
+                        throw new InvalidMoveException("Have to select your own worker");
+                    }
+                    game.setSelectedWorker(worker);
+                } catch (InvalidMoveException e) {
+                    e.printStackTrace();
+                }
+        } else if (uri.equals("/moveworker")) {
+            try {
+                Cell position = new Cell(Integer.parseInt(params.get("x")), Integer.parseInt(params.get("y")));
+                this.game.initiateCardMove(position, this.game.getSelectedWorker(), game.getCurrentPlayer());
+                this.game.gameOverCard(currentPlayer);
+                this.game.setJustMoved(true);
+            } catch (InvalidTurnException | GameOverException | InvalidMoveException e) {
+                e.printStackTrace();
+            }
         }
         // Extract the view-specific data from the game and apply it to the template.
         GameState gameplay = GameState.forGame(this.game);
