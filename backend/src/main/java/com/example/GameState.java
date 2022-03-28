@@ -55,6 +55,18 @@ public class GameState {
                     if (worker == player1.getWorker1() || worker == player1.getWorker2()) text = "X";
                     else if (worker == player2.getWorker1() || worker == player2.getWorker2()) text = "O";
                 }
+                if (board[x][y].getLevels() >= 4) {
+                    text = "D";
+                    clazz = "dome";
+                } if (0 < board[x][y].getLevels() && board[x][y].getLevels() < 4) {
+                    String left = "";
+                    String right = "";
+                    for (int i=0; i < board[x][y].getLevels(); i++) {
+                        left += "[";
+                        right += "]";
+                    }
+                    text = left + text + right;
+                }
                 gameCells[5 * x + y] = new GameCell(text, clazz, link);
             }
         }
