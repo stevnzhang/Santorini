@@ -73,6 +73,16 @@ public class App extends NanoHTTPD {
             } catch (InvalidTurnException | GameOverException | InvalidMoveException e) {
                 e.printStackTrace();
             }
+        } else if (uri.equals("/placetower")) {
+            try {
+                Cell position = new Cell(Integer.parseInt(params.get("x")), Integer.parseInt(params.get("y")));
+                this.game.initiateCardTower(position, this.game.getSelectedWorker(), game.getCurrentPlayer());
+                this.game.setSelectedWorker(null);
+                this.game.setJustMoved(false);
+                this.game.setCurrentPlayer();
+            } catch (GameOverException | InvalidMoveException e) {
+                e.printStackTrace();
+            }
         }
         // Extract the view-specific data from the game and apply it to the template.
         GameState gameplay = GameState.forGame(this.game);
