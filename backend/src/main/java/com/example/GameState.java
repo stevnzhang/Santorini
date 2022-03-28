@@ -50,7 +50,14 @@ public class GameState {
                 if (game.allWorkersPlaced()) {
                     link = "/pickworker?x=" + x + "&y=" + y;
                 }
-
+                Worker selectedWorker = game.getSelectedWorker();
+                if (selectedWorker != null && !game.getJustMoved()) {
+                    link = "/moveworker?x=" + x + "&y=" + y;
+                    if (x == selectedWorker.getRow() && y == selectedWorker.getCol()) clazz = "picked";
+                } if (selectedWorker != null && game.getJustMoved()) {
+                    link = "/placetower?x=" + x + "&y=" + y;
+                    if (x == selectedWorker.getRow() && y == selectedWorker.getCol()) clazz = "picked";
+                }
                 if (worker != null) {
                     if (worker == player1.getWorker1() || worker == player1.getWorker2()) text = "X";
                     else if (worker == player2.getWorker1() || worker == player2.getWorker2()) text = "O";
