@@ -7,6 +7,7 @@ public class Cell {
     private boolean hasDome;
     private boolean occupied;
     private Worker worker;
+    private boolean justPlaced;
 
     private static final int DOME_LEVEL = 4;
 
@@ -15,7 +16,7 @@ public class Cell {
         this.occupied = occupied;
     }
 
-    public Cell(int row, int col) {
+    public Cell(int row, int col) { // For testing
         this.row = row;
         this.col = col;
         this.numLevels = 0;
@@ -35,6 +36,10 @@ public class Cell {
     public Worker getWorker() { return this.worker; }
 
     public void setWorker(Worker worker) { this.worker = worker; }
+
+    public boolean getJustPlaced() { return this.justPlaced; }
+
+    public void setJustPlaced(boolean val) { this.justPlaced = val; }
 
     /**
      * Changes the level of the cell (ONLY FOR TESTING PURPOSES).
