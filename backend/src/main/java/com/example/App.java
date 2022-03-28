@@ -23,7 +23,7 @@ public class App extends NanoHTTPD {
         Player player1 = new Player("1");
         Player player2 = new Player("2");
         this.game = new Game(player1, player2);
-        this.game.setGodCard(new NoCard(), game.getPlayer1());
+        this.game.setGodCard(new Demeter(), game.getPlayer1());
         this.game.setGodCard(new NoCard(), game.getPlayer2());
 
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
@@ -42,8 +42,8 @@ public class App extends NanoHTTPD {
             this.game.setGodCard(new NoCard(), this.game.getPlayer1());
             this.game.setGodCard(new NoCard(), this.game.getPlayer2());
         } else if (uri.equals("/play")) {
-            Cell position = new Cell(Integer.parseInt(params.get("x")), Integer.parseInt(params.get("y")));
             try {
+                Cell position = new Cell(Integer.parseInt(params.get("x")), Integer.parseInt(params.get("y")));
                 this.game.initiatePlayer(position, this.game.getCurrentPlayer());
                 if (currentPlayer.getWorker1() != null && currentPlayer.getWorker2() != null && !game.allWorkersPlaced()) {
                     this.game.setCurrentPlayer();
@@ -56,10 +56,7 @@ public class App extends NanoHTTPD {
                 try {
                     Cell workerPosition = game.getBoard()[Integer.parseInt(params.get("x"))][Integer.parseInt(params.get("y"))];
                     Worker worker = workerPosition.getWorker();
-                    if (worker == null) { throw new InvalidMoveException("Have to select a worker first"); }
-                    if (worker != currentPlayer.getWorker1() && worker != currentPlayer.getWorker2()) {
-                        throw new InvalidMoveException("Have to select your own worker");
-                    }
+                    game.checkWorker(worker);
                     game.setSelectedWorker(worker);
                 } catch (InvalidMoveException e) {
                     e.printStackTrace();
@@ -80,9 +77,13 @@ public class App extends NanoHTTPD {
                 this.game.setSelectedWorker(null);
                 this.game.setJustMoved(false);
                 this.game.setCurrentPlayer();
+                this.game.setState("second build");
             } catch (GameOverException | InvalidMoveException e) {
                 e.printStackTrace();
             }
+        } else if (uri.equals("/skip")) {
+            this.game.setState("skip");
+            this.game.setCurrentPlayer();
         }
         // Extract the view-specific data from the game and apply it to the template.
         GameState gameplay = GameState.forGame(this.game);

@@ -44,7 +44,6 @@ public interface GodCard {
      */
     default boolean checkLegalMove(int row, int col, Worker worker, Cell[][] board) throws InvalidMoveException {
         basicLegalChecks(row, col, board); // Will throw an error if not legal row, col
-        playerCheck(row, col, board);
         int originalRow = worker.getRow();
         int originalCol = worker.getCol();
         int originalHeight = worker.getHeight();
@@ -93,6 +92,7 @@ public interface GodCard {
         int row = position.getRow();
         int col = position.getCol();
         if (checkLegalMove(row, col, worker, board)) {
+            playerCheck(row, col, board); // cannot move into an occupied cell
             if (player.getWorker1() == worker || player.getWorker2() == worker) { // Player is guaranteed to be the currPlayer
                 worker.setPrevHeight(worker.getHeight());
                 board[worker.getRow()][worker.getCol()].setWorker(null);
@@ -100,7 +100,8 @@ public interface GodCard {
                 board[row][col].setWorker(worker);
             }
         }
-        worker.setForced(false); // Current worker just moved, so they have not been forced to their new position
+        // Current worker just moved, so they have not been forced to their new position
+        if (worker.isForced()) worker.setForced(false);
     }
 
     /**

@@ -47,10 +47,10 @@ public class GameState {
                 String link = "/play?x=" + x + "&y=" + y;
                 String clazz = "playable";
                 Worker worker = board[x][y].getWorker();
+                Worker selectedWorker = game.getSelectedWorker();
                 if (game.allWorkersPlaced()) {
                     link = "/pickworker?x=" + x + "&y=" + y;
                 }
-                Worker selectedWorker = game.getSelectedWorker();
                 if (selectedWorker != null && !game.getJustMoved()) {
                     link = "/moveworker?x=" + x + "&y=" + y;
                     if (x == selectedWorker.getRow() && y == selectedWorker.getCol()) clazz = "picked";
@@ -58,14 +58,14 @@ public class GameState {
                     link = "/placetower?x=" + x + "&y=" + y;
                     if (x == selectedWorker.getRow() && y == selectedWorker.getCol()) clazz = "picked";
                 }
-                if (worker != null) {
+                if (worker != null) { // Drawing the workers
                     if (worker == player1.getWorker1() || worker == player1.getWorker2()) text = "X";
                     else if (worker == player2.getWorker1() || worker == player2.getWorker2()) text = "O";
                 }
-                if (board[x][y].getLevels() >= 4) {
+                if (board[x][y].getLevels() >= 4) { // Drawing Dome
                     text = "D";
                     clazz = "dome";
-                } if (0 < board[x][y].getLevels() && board[x][y].getLevels() < 4) {
+                } if (0 < board[x][y].getLevels() && board[x][y].getLevels() < 4) { // Drawing Towers
                     String left = "";
                     String right = "";
                     for (int i=0; i < board[x][y].getLevels(); i++) {

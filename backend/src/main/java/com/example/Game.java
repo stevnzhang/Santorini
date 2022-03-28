@@ -12,7 +12,7 @@ public class Game {
     private Worker currentWorker;
     private boolean gameOver;
     private Player winner;
-    private String state = "build";
+    private String state;
     private Worker selectedWorker;
     private boolean justMoved;
 
@@ -24,7 +24,7 @@ public class Game {
         this.board = new Cell[numRows][numCols];
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
-                this.board[row][col] = new Cell(0, false);
+                this.board[row][col] = new Cell(row, col);
             }
         }
     }
@@ -46,6 +46,8 @@ public class Game {
 
     public boolean getGameOver() { return this.gameOver; }
 
+    public String getState() { return this.state; }
+
     public void setState(String state) { this.state = state; }
 
     public void setGodCard(GodCard gc, Player player) {
@@ -63,6 +65,13 @@ public class Game {
     public boolean getJustMoved() { return this.justMoved; }
 
     public void setJustMoved(boolean val) { this.justMoved = val; }
+
+    public void checkWorker(Worker worker) throws InvalidMoveException {
+        if (worker == null) { throw new InvalidMoveException("Have to select a worker first"); }
+        if (worker != this.currentPlayer.getWorker1() && worker != this.currentPlayer.getWorker2()) {
+            throw new InvalidMoveException("Have to select your own worker");
+        }
+    }
 
     /**
      * Places a tower at the specified location on the board
@@ -120,6 +129,7 @@ public class Game {
         card.initiateMove(position, worker, player, this.board);
         this.board[originalRow][originalCol].setWorker(null);
         this.currentWorker = worker;
+        setState("build");
     }
 
     public void initiateCardTower(Cell position, Worker worker, Player player) throws InvalidMoveException, GameOverException {
@@ -127,7 +137,14 @@ public class Game {
         if (this.currentWorker != worker) { throw new InvalidMoveException("Build has to be adjacent to recently moved worker!"); }
 
         GodCard card = (player == this.player1 ? this.player1GC : this.player2GC);
-        if (this.state != "skip") card.initiateTower(position, worker, this.board, this.state);
+//        if (this.state == "build") card.initiateTower(position, worker, this.board, this.state);
+//        else if (this.state == "second build") card.initiateTower(position, worker, this.board, this.state);
+        // TODO: DEMETER AND SELECT GOD CARDS
+        if (this.state != "skip") {
+            card.initiateTower(position, worker, this.board, this.state);
+            if (this.state == "second build") setState(null);
+        }
+        else if (this.state == "skip") setState(null);
     }
 
     public void gameOverCard(Player player) {
