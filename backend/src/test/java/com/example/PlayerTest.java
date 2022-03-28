@@ -15,7 +15,9 @@ public class PlayerTest {
 
     @Before
     public void setUp() {
-        game = new Game(new Player(), new NoCard(), new Player(), new NoCard());
+        game = new Game(new Player("1"), new Player("2"));
+        game.setGodCard(new NoCard(), this.game.getPlayer1());
+        game.setGodCard(new NoCard(), this.game.getPlayer2());
         board = game.getBoard();
         player = game.getPlayer1();
     }
@@ -23,7 +25,8 @@ public class PlayerTest {
     // Cannot check a lot of tests (like correct thrown exception) since this requires game calls + checks
     @Test
     public void testPlaceWorker() {
-        player.placeWorker(0, 0, 2, 2, board);
+        game.placeWorker(0, 0, player);
+        game.placeWorker(2, 2, player);
         assertTrue(board[0][0].occupancy());
         assertTrue(board[2][2].occupancy());
 
@@ -37,7 +40,8 @@ public class PlayerTest {
     public void testPlaceWorkerDifferentHeights() {
         board[0][0].setLevel(1);
         board[0][0].setLevel(3);
-        player.placeWorker(0, 0, 2, 2, board);
+        game.placeWorker(0, 0, player);
+        game.placeWorker(2, 2, player);
         assertTrue(board[0][0].occupancy());
         assertTrue(board[2][2].occupancy());
     }

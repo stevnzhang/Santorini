@@ -14,14 +14,17 @@ public class WorkerTest {
 
     @Before
     public void setUp() {
-        game = new Game(new Player(), new NoCard(), new Player(), new NoCard());
+        game = new Game(new Player("1"), new Player("2"));
+        game.setGodCard(new NoCard(), this.game.getPlayer1());
+        game.setGodCard(new NoCard(), this.game.getPlayer2());
         board = game.getBoard();
         player = game.getPlayer1();
     }
 
     @Test
     public void testMoveWorker() {
-        player.placeWorker(0, 0, 2, 2, board);
+        game.placeWorker(0, 0, player);
+        game.placeWorker(2, 2, player);
         Worker worker1 = player.getWorker1();
         assertTrue(board[0][0].occupancy());
         assertFalse(board[1][1].occupancy());
@@ -32,7 +35,8 @@ public class WorkerTest {
 
     @Test
     public void testMoveBothWorkers() {
-        player.placeWorker(0, 0, 2, 2, board);
+        game.placeWorker(0, 0, player);
+        game.placeWorker(2, 2, player);
         Worker worker1 = player.getWorker1();
         Worker worker2 = player.getWorker2();
         assertTrue(board[0][0].occupancy());
@@ -50,7 +54,8 @@ public class WorkerTest {
 
     @Test
     public void testPlaceTower() {
-        player.placeWorker(0, 0, 2, 2, board);
+        game.placeWorker(0, 0, player);
+        game.placeWorker(2, 2, player);
         Worker worker1 = player.getWorker1();
 
         worker1.placeTower(0, 0, board);

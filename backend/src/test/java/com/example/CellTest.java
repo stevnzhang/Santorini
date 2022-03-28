@@ -14,7 +14,9 @@ public class CellTest {
 
     @Before
     public void setUp() {
-        game = new Game(new Player(), new NoCard(), new Player(), new NoCard());
+        game = new Game(new Player("1"), new Player("2"));
+        game.setGodCard(new NoCard(), this.game.getPlayer1());
+        game.setGodCard(new NoCard(), this.game.getPlayer2());
         board = game.getBoard();
     }
 
