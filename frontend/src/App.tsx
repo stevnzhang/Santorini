@@ -138,6 +138,19 @@ class App extends Component<Props, Cells> {
     this.setState({ cells: newCells, instructions: instr })
   }
 
+  async placetower(url: String) {
+    console.log("PLACING")
+    const href = "placetower?" + url.split("?")[1];
+    const response = await fetch(href);
+    const json = await response.json();
+
+    const newCells: Array<Cell> = this.convertToCell(json);
+    const turn = this.getTurn(json)
+    const winner = this.getWinner(json)
+    const instr = this.getInstr(turn, winner)
+    this.setState({ cells: newCells, instructions: instr })
+  }
+
   async switch() {
     if (window.location.href === "http://localhost:3000/newgame" && oldHref !== window.location.href) {
         this.newGame();
@@ -151,6 +164,9 @@ class App extends Component<Props, Cells> {
     } else if (window.location.href.split("?")[0] === "http://localhost:3000/moveworker" && oldHref !== window.location.href) {
         this.moveworker(window.location.href);
         oldHref = window.location.href;
+    } else if (window.location.href.split("?")[0] === "http://localhost:3000/placetower" && oldHref !== window.location.href) {
+      this.placetower(window.location.href);
+      oldHref = window.location.href;
     }
   };
 
