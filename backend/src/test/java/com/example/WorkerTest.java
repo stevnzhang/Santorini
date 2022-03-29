@@ -21,6 +21,20 @@ public class WorkerTest {
         player = game.getPlayer1();
     }
 
+    private void moveWorkerHelper(int row, int col, Worker worker, Cell[][] board) {
+        int originalRow = worker.getRow();
+        int originalCol = worker.getCol();
+        // Make Move
+        board[originalRow][originalCol].setWorker(null);
+        board[originalRow][originalCol].setUnoccupied();
+        board[row][col].setWorker(worker);
+        board[row][col].setOccupied();
+        //Update Worker
+        worker.setRow(row);
+        worker.setCol(col);
+        worker.setHeight(board[row][col].getLevels());
+    }
+
     @Test
     public void testMoveWorker() {
         game.placeWorker(0, 0, player);
@@ -28,7 +42,7 @@ public class WorkerTest {
         Worker worker1 = player.getWorker1();
         assertTrue(board[0][0].occupancy());
         assertFalse(board[1][1].occupancy());
-        worker1.moveWorker(1, 1, board);
+        moveWorkerHelper(1, 1, worker1, board);
         assertFalse(board[0][0].occupancy());
         assertTrue(board[1][1].occupancy());
     }
@@ -41,37 +55,15 @@ public class WorkerTest {
         Worker worker2 = player.getWorker2();
         assertTrue(board[0][0].occupancy());
         assertFalse(board[4][4].occupancy());
-        worker1.moveWorker(4, 4, board);
+        moveWorkerHelper(4, 4, worker1, board);
         assertFalse(board[0][0].occupancy());
         assertTrue(board[4][4].occupancy());
 
         assertTrue(board[2][2].occupancy());
         assertFalse(board[3][4].occupancy());
-        worker2.moveWorker(3, 4, board);
+        moveWorkerHelper(3, 4, worker2, board);
         assertFalse(board[2][2].occupancy());
         assertTrue(board[3][4].occupancy());
     }
 
-    @Test
-    public void testPlaceTower() {
-        game.placeWorker(0, 0, player);
-        game.placeWorker(2, 2, player);
-        Worker worker1 = player.getWorker1();
-
-        worker1.placeTower(0, 0, board);
-        assertEquals(1, board[0][0].getLevels());
-
-        worker1.placeTower(0, 0, board);
-        assertEquals(2, board[0][0].getLevels());
-
-        worker1.placeTower(0, 0, board);
-        assertEquals(3, board[0][0].getLevels());
-
-        worker1.placeTower(0, 0, board);
-        assertEquals(4, board[0][0].getLevels());
-
-        // Doesn't add more to a tower with a dome
-        worker1.placeTower(0, 0, board);
-        assertEquals(4, board[0][0].getLevels());
-    }
 }
