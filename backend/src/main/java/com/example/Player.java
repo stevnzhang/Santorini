@@ -3,11 +3,9 @@ package com.example;
 public class Player {
     private Worker worker1;
     private Worker worker2;
-    private String ID;
+    private String id;
 
-    public Player(String ID) {
-        this.ID = ID;
-    }
+    public Player(String id) { this.id = id; }
 
     public Worker getWorker1() { return this.worker1; }
 
@@ -17,6 +15,6 @@ public class Player {
 
     public void setWorker2(Worker worker) { this.worker2 = worker; }
 
-    public String getID() { return this.ID; }
+    public String getID() { return this.id; }
 
 }
