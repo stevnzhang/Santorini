@@ -1,3 +1,57 @@
+# How to play with this GUI
+
+#### Start the game with:
+
+Backend:\
+`npx kill-port 8080`\
+`mvn clean install`\
+`mvn exec:exec`
+
+Frontend:\
+`npm install`\
+`npm run compile`\
+`npm run start`
+
+## New Game
+
+Just click on the New Game button to restart the game!
+
+### Disclaimer*
+Undo and skip have not been implemented. While skip for Demeter has not been implemented in the frontend, it has been implemented and tested in the backend. I have fully implemented Minotaur and Pan in both backend and frontend.
+
+Additionally, to change and play with different God Cards, you will have to change the gc1 (player1) and gc2 (player2) variables in `app.java` lines 28-29.
+
+## Initializing workers
+
+Whenever you start a new game, simply click on any two (2) valid board positions to place Player 1's workers. Then, click on two (2) additional valid board positions to place Player 2's workers. After the players have been initialized, you can begin to start moving and building with the workers.
+
+Invalid placements will display an error message in the instructions at the top of the board.
+
+## Moving
+
+First, select a worker (has to be the current player's worker). The cell of the worker you selected should be highlighted a pale yellow. You can then click any valid board location to move the selected worker to that location.
+
+Player 1 is "X"\
+Player 2 is "O"
+
+Invalid selections and moves will display an error message in the instructions at the top of the board.
+
+
+## Towering
+
+Right after moving a worker, the worker that was just moved stays selected. We continue to use this selected worker to place a valid tower.
+
+Each additional [ ] is the equivalent of a new tower. E.g [ [ X ] ] is a 2-high tower with Player 1 in it.
+
+Towers with a dome will have "D" in the cell, and the cell will be highlighted blue, like in Santorini.
+
+Invalid selections and placements will display an error message in the instructions at the top of board.
+
+## References
+Used Recitation 7's TicTacToe [Solution](https://github.com/CMU-17-214/s22-rec07-solution) as a reference for code.
+
+
+
 # Homework 3: Santorini (Part 1)
 
 In this assignment, you will design and implement the core logic of a boardgame called Santorini (without god cards) **in and only in Java**. The focus of this assignment is on considering design alternatives for code. In Homework 5, we will revisit the game and extend it with god cards, with a GUI, and with an AI opponent. 
