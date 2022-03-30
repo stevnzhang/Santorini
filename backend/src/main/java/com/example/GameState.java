@@ -2,7 +2,7 @@ package com.example;
 
 import java.util.Arrays;
 
-public class GameState {
+public final class GameState {
 
     // Don't change variables -- No sets, only gets and legal checks
     // Override the links
@@ -10,25 +10,36 @@ public class GameState {
     private final GameCell[] gameCells;
     private final Player winner;
     private final Player turn;
+    private String exception;
 
-    private GameState(GameCell[] gameCells, Player winner, Player turn) {
+    private GameState(GameCell[] gameCells, Player winner, Player turn, String exception) {
         this.gameCells = gameCells;
         this.turn = turn;
         this.winner = winner;
+        this.exception = exception;
     }
 
-    public static GameState forGame(Game game) {
+    public static GameState forGame(Game game, String exception) {
         GameCell[] gameCells = getGameCells(game);
         Player winner = getWinner(game);
         Player turn = getTurn(game);
-        return new GameState(gameCells, winner, turn);
+        return new GameState(gameCells, winner, turn, exception);
     }
 
     @Override
     public String toString() {
         if (this.winner == null) {
-            return "{ \"cells\": " + Arrays.toString(this.gameCells) + "," +
-                     "\"turn\": " + String.format("\"%s\"", this.turn.getID()) + "}";
+            if (this.exception != null) {
+                return "{ \"cells\": " + Arrays.toString(this.gameCells) + "," +
+                        "\"turn\": " + String.format("\"%s\"", this.turn.getID()) + "," +
+                        "\"exception\": " + String.format("\"%s\"", this.exception) + "}";
+            }
+
+            else {
+                return "{ \"cells\": " + Arrays.toString(this.gameCells) + "," +
+                        "\"turn\": " + String.format("\"%s\"", this.turn.getID()) + "}";
+            }
+
         }
         // if there is a winner:
         return "{ \"cells\": " + Arrays.toString(this.gameCells) + "," +
@@ -37,7 +48,7 @@ public class GameState {
     }
 
     private static GameCell[] getGameCells(Game game) {
-        GameCell gameCells[] = new GameCell[25];
+        GameCell[] gameCells = new GameCell[25];
         Player player1 = game.getPlayer1();
         Player player2 = game.getPlayer2();
         Cell[][] board = game.getBoard();
@@ -50,30 +61,33 @@ public class GameState {
                 Worker selectedWorker = game.getSelectedWorker();
                 if (game.allWorkersPlaced()) {
                     link = "/pickworker?x=" + x + "&y=" + y;
-                }
-                if (selectedWorker != null && !game.getJustMoved()) {
+                } if (selectedWorker != null && !game.getJustMoved()) {
                     link = "/moveworker?x=" + x + "&y=" + y;
                     if (x == selectedWorker.getRow() && y == selectedWorker.getCol()) clazz = "picked";
                 } if (selectedWorker != null && game.getJustMoved()) {
                     link = "/placetower?x=" + x + "&y=" + y;
                     if (x == selectedWorker.getRow() && y == selectedWorker.getCol()) clazz = "picked";
-                }
-                if (worker != null) { // Drawing the workers
+                } if (worker != null) { // Drawing the workers
                     if (worker == player1.getWorker1() || worker == player1.getWorker2()) text = "X";
                     else if (worker == player2.getWorker1() || worker == player2.getWorker2()) text = "O";
-                }
-                if (board[x][y].getLevels() >= 4) { // Drawing Dome
-                    text = "D";
+                } if (board[x][y].getLevels() >= 4) { // Drawing Dome
+                    String left = "";
+                    String right = "";
+                    for (int i=0; i < board[x][y].getLevels(); i++) {
+                        left += "[ ";
+                        right += " ]";
+                    }
+                    text = left + "D" + right;
                     clazz = "dome";
                 } if (0 < board[x][y].getLevels() && board[x][y].getLevels() < 4) { // Drawing Towers
                     String left = "";
                     String right = "";
                     for (int i=0; i < board[x][y].getLevels(); i++) {
-                        left += "[";
-                        right += "]";
+                        left += "[ ";
+                        right += " ]";
                     }
                     text = left + text + right;
-                }
+                } if (game.getGameOver()) clazz = "unplayable";
                 gameCells[5 * x + y] = new GameCell(text, clazz, link);
             }
         }
@@ -87,6 +101,7 @@ public class GameState {
     private static Player getTurn(Game game) {
         return game.getCurrentPlayer() == game.getPlayer1() ? game.getPlayer1() : game.getPlayer2();
     }
+
 }
 
 class GameCell {

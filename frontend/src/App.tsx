@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import './App.css'
 
 var oldHref = "http://localhost:3000"
-var turn = 1
 
 // If board resets to initial state (something is wrong here)
 
@@ -85,8 +84,14 @@ class App extends Component<Props, Cells> {
     return p["winner"]
   }
 
-  getInstr(turn: String, winner: String | undefined) {
-    if (winner === undefined) return "It is Player " + turn + "'s turn"
+  getException(p: any): String {
+    return p["exception"]
+  }
+
+  getInstr(turn: String, winner: String | undefined, exception: String) {
+    console.log(winner)
+    if (exception != "" && winner === undefined) return exception
+    else if (winner === undefined) return "It is Player " + turn + "'s turn"
     else return "Player " + winner + " wins!"
   }
 
@@ -108,7 +113,8 @@ class App extends Component<Props, Cells> {
     const newCells: Array<Cell> = this.convertToCell(json);
     const turn = this.getTurn(json)
     const winner = this.getWinner(json)
-    const instr = this.getInstr(turn, winner)
+    const exception = this.getException(json)
+    const instr = this.getInstr(turn, winner, exception)
     this.setState({ cells: newCells, instructions: instr })
   }
 
@@ -121,7 +127,8 @@ class App extends Component<Props, Cells> {
     const newCells: Array<Cell> = this.convertToCell(json);
     const turn = this.getTurn(json)
     const winner = this.getWinner(json)
-    const instr = this.getInstr(turn, winner)
+    const exception = this.getException(json)
+    const instr = this.getInstr(turn, winner, exception)
     this.setState({ cells: newCells, instructions: instr })
   }
 
@@ -134,7 +141,8 @@ class App extends Component<Props, Cells> {
     const newCells: Array<Cell> = this.convertToCell(json);
     const turn = this.getTurn(json)
     const winner = this.getWinner(json)
-    const instr = this.getInstr(turn, winner)
+    const exception = this.getException(json)
+    const instr = this.getInstr(turn, winner, exception)
     this.setState({ cells: newCells, instructions: instr })
   }
 
@@ -147,20 +155,33 @@ class App extends Component<Props, Cells> {
     const newCells: Array<Cell> = this.convertToCell(json);
     const turn = this.getTurn(json)
     const winner = this.getWinner(json)
-    const instr = this.getInstr(turn, winner)
+    const exception = this.getException(json)
+    const instr = this.getInstr(turn, winner, exception)
     this.setState({ cells: newCells, instructions: instr })
+  }
+
+  async skip() {
+    console.log("SKIP")
+    const response = await fetch("skip");
+    const json = await response.json();
+
+    const newCells: Array<Cell> = this.convertToCell(json);
+    this.setState({ cells: newCells, instructions: "It is Player 1's turn"})
   }
 
   async switch() {
     if (window.location.href === "http://localhost:3000/newgame" && oldHref !== window.location.href) {
         this.newGame();
         oldHref = window.location.href;
+    } if (window.location.href === "http://localhost:3000/skip" && oldHref !== window.location.href) {
+        this.skip();
+        oldHref = window.location.href;
     } else if (window.location.href.split("?")[0] === "http://localhost:3000/play" && oldHref !== window.location.href) {
-      this.play(window.location.href);
-      oldHref = window.location.href;
+        this.play(window.location.href);
+        oldHref = window.location.href;
     } else if (window.location.href.split("?")[0] === "http://localhost:3000/pickworker" && oldHref !== window.location.href) {
-      this.pickworker(window.location.href);
-      oldHref = window.location.href;
+        this.pickworker(window.location.href);
+        oldHref = window.location.href;
     } else if (window.location.href.split("?")[0] === "http://localhost:3000/moveworker" && oldHref !== window.location.href) {
         this.moveworker(window.location.href);
         oldHref = window.location.href;
