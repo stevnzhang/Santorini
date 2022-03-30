@@ -9,24 +9,28 @@ public class Demeter implements GodCard {
      * @param tower the tower we want to place on the board.
      * @param worker the worker we moved.
      * @param board the game board.
+     * @param state the current state of a player's turn
      */
     @Override
-    public void initiateTower(Cell tower, Worker worker, Cell[][] board) throws InvalidMoveException {
-        // First tower legality checks and placement
-        Cell firstTower = tower;
-        if (checkLegalPlacement(firstTower.getRow(), firstTower.getCol(), worker, board)) {
-            worker.placeTower(firstTower.getRow(), firstTower.getCol(), board);
+    public void initiateTower(Cell tower, Worker worker, Cell[][] board, String state) throws InvalidMoveException {
+        int tRow = tower.getRow();
+        int tCol = tower.getCol();
+
+        if (board[tRow][tCol].getJustPlaced()) { throw new InvalidMoveException("Cannot place tower on first placed tower!"); }
+
+        if (state == "build") {
+            // First tower legality checks and placement
+            if (checkLegalPlacement(tRow, tCol, worker, board)) {
+                board[tRow][tCol].addLevel();
+                board[tRow][tCol].setJustPlaced(true);
+            }
+        } else if (state == "second build") {
+            if (checkLegalPlacement(tRow, tCol, worker, board)) {
+                board[tRow][tCol].addLevel();
+                board[tRow][tCol].setJustPlaced(false);
+            }
         }
 
-//        // Second tower legality checks and placement
-//        if (towers.length > 1) { // Guarantee no indexing out of bounds
-//            Cell secondTower = towers[1];
-//            checkLegalPlacement(secondTower.getRow(), secondTower.getCol(), worker, board);
-//            if (firstTower.getRow() != secondTower.getRow() ||
-//                firstTower.getCol() != secondTower.getCol()) {
-//                worker.placeTower(secondTower.getRow(), secondTower.getCol(), board);
-//            }
-//        }
     }
 
 }

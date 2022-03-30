@@ -27,9 +27,7 @@ public class DemeterTest {
 
     @Test
     public void testDemeterWorks() throws InvalidMoveException, InvalidTurnException, GameOverException {
-        Worker worker1 = game.getPlayer1().getWorker1(); // (0, 0)
         Worker worker2 = game.getPlayer1().getWorker2(); // (1, 1)
-        Worker worker4 = game.getPlayer2().getWorker2(); // (1, 0)
 
         game.initiateCardMove(new Cell(0, 2), worker2, game.getPlayer1());
         game.initiateCardTower(new Cell(0, 3), worker2, game.getPlayer1());

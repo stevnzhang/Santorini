@@ -88,7 +88,7 @@
         <module name="EqualsHashCode"/>
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
-        <module name="MagicNumber"/>
+<!--        <module name="MagicNumber"/>         Removed for localhost:8080 in App.java and Game state -->
         <module name="MissingSwitchDefault"/>
 
         <!-- Checks for class design                         -->
