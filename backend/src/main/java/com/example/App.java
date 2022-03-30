@@ -16,6 +16,8 @@ public class App extends NanoHTTPD {
     }
 
     private Game game;
+    private GodCard gc1;
+    private GodCard gc2;
 
     public App() throws IOException {
         super(8080);
@@ -23,8 +25,10 @@ public class App extends NanoHTTPD {
         Player player1 = new Player("1");
         Player player2 = new Player("2");
         this.game = new Game(player1, player2);
-        this.game.setGodCard(new Demeter(), game.getPlayer1());
-        this.game.setGodCard(new NoCard(), game.getPlayer2());
+        this.gc1 = new Minotaur();
+        this.gc2 = new NoCard();
+        this.game.setGodCard(gc1, game.getPlayer1());
+        this.game.setGodCard(gc2, game.getPlayer2());
 
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
         System.out.println("\nRunning!\n");
@@ -35,12 +39,13 @@ public class App extends NanoHTTPD {
         String uri = session.getUri();
         Map<String, String> params = session.getParms();
         Player currentPlayer = this.game.getCurrentPlayer();
+        String exception = "";
         if (uri.equals("/newgame")) {
             Player player1 = new Player("1");
             Player player2 = new Player("2");
             this.game = new Game(player1, player2);
-            this.game.setGodCard(new NoCard(), this.game.getPlayer1());
-            this.game.setGodCard(new NoCard(), this.game.getPlayer2());
+            this.game.setGodCard(gc1, this.game.getPlayer1());
+            this.game.setGodCard(gc2, this.game.getPlayer2());
         } else if (uri.equals("/play")) {
             try {
                 Cell position = new Cell(Integer.parseInt(params.get("x")), Integer.parseInt(params.get("y")));
@@ -50,7 +55,7 @@ public class App extends NanoHTTPD {
                 }
                 if (game.allWorkersPlaced()) this.game.setCurrentPlayer();
             } catch (InvalidMoveException e) {
-                e.printStackTrace();
+                exception = "Player " + currentPlayer.getID() + "'s Turn: " + e.getMessage();
             }
         } else if (uri.equals("/pickworker")) {
                 try {
@@ -59,7 +64,7 @@ public class App extends NanoHTTPD {
                     game.checkWorker(worker);
                     game.setSelectedWorker(worker);
                 } catch (InvalidMoveException e) {
-                    e.printStackTrace();
+                    exception = "Player " + currentPlayer.getID() + "'s Turn: " + e.getMessage();
                 }
         } else if (uri.equals("/moveworker")) {
             try {
@@ -68,7 +73,7 @@ public class App extends NanoHTTPD {
                 this.game.gameOverCard(currentPlayer);
                 this.game.setJustMoved(true);
             } catch (InvalidTurnException | GameOverException | InvalidMoveException e) {
-                e.printStackTrace();
+                exception = "Player " + currentPlayer.getID() + "'s Turn: " + e.getMessage();
             }
         } else if (uri.equals("/placetower")) {
             try {
@@ -77,16 +82,15 @@ public class App extends NanoHTTPD {
                 this.game.setSelectedWorker(null);
                 this.game.setJustMoved(false);
                 this.game.setCurrentPlayer();
-                this.game.setState("second build");
             } catch (GameOverException | InvalidMoveException e) {
-                e.printStackTrace();
+                exception = "Player " + currentPlayer.getID() + "'s Turn: " + e.getMessage();
             }
         } else if (uri.equals("/skip")) {
             this.game.setState("skip");
             this.game.setCurrentPlayer();
         }
         // Extract the view-specific data from the game and apply it to the template.
-        GameState gameplay = GameState.forGame(this.game);
+        GameState gameplay = GameState.forGame(this.game, exception);
         return newFixedLengthResponse(gameplay.toString());
     }
 

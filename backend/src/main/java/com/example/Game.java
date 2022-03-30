@@ -12,7 +12,7 @@ public class Game {
     private Worker currentWorker;
     private boolean gameOver;
     private Player winner;
-    private String state;
+    private String state = "build";
     private Worker selectedWorker;
     private boolean justMoved;
 
@@ -78,6 +78,7 @@ public class Game {
      *
      * @param row worker's row
      * @param col worker's col
+     * @param player the player we want to initialize workers for
      */
     public void placeWorker(int row, int col, Player player) {
         Worker worker1 = player.getWorker1();
@@ -137,14 +138,14 @@ public class Game {
         if (this.currentWorker != worker) { throw new InvalidMoveException("Build has to be adjacent to recently moved worker!"); }
 
         GodCard card = (player == this.player1 ? this.player1GC : this.player2GC);
-//        if (this.state == "build") card.initiateTower(position, worker, this.board, this.state);
-//        else if (this.state == "second build") card.initiateTower(position, worker, this.board, this.state);
-        // TODO: DEMETER AND SELECT GOD CARDS
-        if (this.state != "skip") {
-            card.initiateTower(position, worker, this.board, this.state);
-            if (this.state == "second build") setState(null);
+
+        card.initiateTower(position, worker, this.board, this.state);
+
+        if (this.state != "build") {
+            this.state = "build";
+            this.justMoved = false;
+            this.selectedWorker = null;
         }
-        else if (this.state == "skip") setState(null);
     }
 
     public void gameOverCard(Player player) {
