@@ -52,5 +52,6 @@ body {
 }
 
 .playable { background-color: lightgreen }
-.dome { background-color: deepskyblue; }
+.dome { background-color: deepskyblue }
 .picked { background-color: lightgoldenrodyellow }
+.unplayable { background-color: lightcoral }
