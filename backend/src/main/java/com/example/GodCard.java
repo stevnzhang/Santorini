@@ -91,13 +91,21 @@ public interface GodCard {
     default void initiateMove(Cell position, Worker worker, Player player, Cell[][] board) throws InvalidMoveException, InvalidTurnException {
         int row = position.getRow();
         int col = position.getCol();
+        int wRow = worker.getRow();
+        int wCol = worker.getCol();
         if (checkLegalMove(row, col, worker, board)) {
             playerCheck(row, col, board); // cannot move into an occupied cell
             if (player.getWorker1() == worker || player.getWorker2() == worker) { // Player is guaranteed to be the currPlayer
                 worker.setPrevHeight(worker.getHeight());
-                board[worker.getRow()][worker.getCol()].setWorker(null);
-                worker.moveWorker(row, col, board);
+                // Make Move
+                board[wRow][wCol].setWorker(null);
+                board[wRow][wCol].setUnoccupied();
                 board[row][col].setWorker(worker);
+                board[row][col].setOccupied();
+                // Update Worker
+                worker.setRow(row);
+                worker.setCol(col);
+                worker.setHeight(board[row][col].getLevels());
             }
         }
         // Current worker just moved, so they have not been forced to their new position
@@ -118,7 +126,7 @@ public interface GodCard {
         basicLegalChecks(row, col, board);
         playerCheck(row, col, board);
         if (checkLegalPlacement(row, col, worker, board)) {
-            worker.placeTower(row, col, board);
+            board[row][col].addLevel();
         }
     }
 
