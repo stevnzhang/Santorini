@@ -57,6 +57,20 @@ public class MinotaurTest {
     @Test
     public void testCannotPushOntoAnotherPlayer() throws InvalidMoveException {
         Exception e = assertThrows(InvalidMoveException.class, () -> {
+            Worker worker1 = game.getPlayer1().getWorker1(); // (0, 0)
+            Worker worker2 = game.getPlayer1().getWorker2(); // (1, 1)
+            game.initiateCardMove(new Cell(1, 1), worker1, game.getPlayer1());
+        });
+
+        String expectedMessage = "Cannot push your own worker!";
+        String actualMessage = e.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void testCannotPushOwnPlayer() throws InvalidMoveException {
+        Exception e = assertThrows(InvalidMoveException.class, () -> {
             Worker worker1 = game.getPlayer1().getWorker1();
             Worker worker2 = game.getPlayer1().getWorker2();
             Worker worker3 = game.getPlayer2().getWorker1(); // (0, 1)
