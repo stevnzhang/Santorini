@@ -1,7 +1,6 @@
-# How to play with this GUI
+# Start a game:
 
-#### Start the game with:
-
+#### Commands
 Backend:\
 `npx kill-port 8080`\
 `mvn clean install`\
@@ -12,22 +11,22 @@ Frontend:\
 `npm run compile`\
 `npm run start`
 
-## New Game
+### New Game
 
 Just click on the New Game button to restart the game!
 
-### Disclaimer*
+#### Disclaimer*
 Undo and skip have not been implemented. While skip for Demeter has not been implemented in the frontend, it has been implemented and tested in the backend. I have fully implemented Minotaur and Pan in both backend and frontend.
 
 Additionally, to change and play with different God Cards, you will have to change the gc1 (player1) and gc2 (player2) variables in `app.java` lines 28-29.
 
-## Initializing workers
+### Initializing workers
 
 Whenever you start a new game, simply click on any two (2) valid board positions to place Player 1's workers. Then, click on two (2) additional valid board positions to place Player 2's workers. After the players have been initialized, you can begin to start moving and building with the workers.
 
 Invalid placements will display an error message in the instructions at the top of the board.
 
-## Moving
+### Moving
 
 First, select a worker (has to be the current player's worker). The cell of the worker you selected should be highlighted a pale yellow. You can then click any valid board location to move the selected worker to that location.
 
@@ -37,7 +36,7 @@ Player 2 is "O"
 Invalid selections and moves will display an error message in the instructions at the top of the board.
 
 
-## Towering
+### Towering
 
 Right after moving a worker, the worker that was just moved stays selected. We continue to use this selected worker to place a valid tower.
 
@@ -47,7 +46,8 @@ Towers with a dome will have "D" in the cell, and the cell will be highlighted b
 
 Invalid selections and placements will display an error message in the instructions at the top of board.
 
-## References
+### References
+
 Used Recitation 7's TicTacToe [Solution](https://github.com/CMU-17-214/s22-rec07-solution) as a reference for code.
 
 
