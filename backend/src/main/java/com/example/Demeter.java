@@ -18,19 +18,14 @@ public class Demeter implements GodCard {
 
         if (board[tRow][tCol].getJustPlaced()) { throw new InvalidMoveException("Cannot place tower on first placed tower!"); }
 
-        if (state == "build") {
-            // First tower legality checks and placement
-            if (checkLegalPlacement(tRow, tCol, worker, board)) {
+        if (checkLegalPlacement(tRow, tCol, worker, board)) {
+            if (state == "build") {
                 board[tRow][tCol].addLevel();
-                board[tRow][tCol].setJustPlaced(true);
-            }
-        } else if (state == "second build") {
-            if (checkLegalPlacement(tRow, tCol, worker, board)) {
+            } else if (state == "second build") {
                 board[tRow][tCol].addLevel();
-                board[tRow][tCol].setJustPlaced(false);
             }
+            board[tRow][tCol].setJustPlaced(true);
         }
-
     }
 
 }

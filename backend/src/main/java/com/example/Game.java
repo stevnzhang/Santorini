@@ -48,8 +48,6 @@ public class Game {
 
     public String getState() { return this.state; }
 
-    public void setState(String state) { this.state = state; }
-
     public void setGodCard(GodCard gc, Player player) {
         if (player == this.player1) {
             this.player1GC = gc;
@@ -73,6 +71,15 @@ public class Game {
         }
     }
 
+    public void setState(String state) {
+        if (state == "build") this.state = "second build";
+        else if (state == "second build" || state == "skip") {
+            this.state = "build";
+            this.justMoved = false;
+            this.selectedWorker = null;
+        }
+    }
+
     /**
      * Places a tower at the specified location on the board
      *
@@ -80,7 +87,7 @@ public class Game {
      * @param col worker's col
      * @param player the player we want to initialize workers for
      */
-    public void placeWorker(int row, int col, Player player) {
+    public void placeWorker(int row, int col, Player player) { // ONLY PUBLIC FOR TESTING PURPOSES, OTHERWISE WOULD BE PRIVATE
         Worker worker1 = player.getWorker1();
         if (worker1 == null) {
             player.setWorker1(new Worker(row, col, 0));
@@ -130,7 +137,6 @@ public class Game {
         card.initiateMove(position, worker, player, this.board);
         this.board[originalRow][originalCol].setWorker(null);
         this.currentWorker = worker;
-        setState("build");
     }
 
     public void initiateCardTower(Cell position, Worker worker, Player player) throws InvalidMoveException, GameOverException {
@@ -141,11 +147,7 @@ public class Game {
 
         card.initiateTower(position, worker, this.board, this.state);
 
-        if (this.state != "build") {
-            this.state = "build";
-            this.justMoved = false;
-            this.selectedWorker = null;
-        }
+        setState(state);
     }
 
     public void gameOverCard(Player player) {

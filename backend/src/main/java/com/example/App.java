@@ -86,7 +86,7 @@ public class App extends NanoHTTPD {
                 exception = "Player " + currentPlayer.getID() + "'s Turn: " + e.getMessage();
             }
         } else if (uri.equals("/skip")) {
-            this.game.setState("skip");
+            this.game.setState("build");
             this.game.setCurrentPlayer();
         }
         // Extract the view-specific data from the game and apply it to the template.
