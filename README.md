@@ -12,6 +12,7 @@
   - [Initializing Workers](#initializing-workers)
   - [Moving](#moving)
   - [Building](#building)
+- [Learning Goals](#learning-goals)
 - [Author's Note](#authors-note)
 
 ## Overview
@@ -93,6 +94,11 @@ Undo and skip have not been implemented. While skip for Demeter has not been imp
 Additionally, to change and play with different God Cards, you will have to change the gc1 (player1) and gc2 (player2) variables in `app.java` lines 28-29.
 
 _I am planning to update this game in the near future to implement the undo and skip feature (using immutable board states) as well as implementing a frontend screen to handle assigning each player a god card. Stay tuned!_
+
+## Learning Goals
+- Demonstrate a comprehensive design and development process including object-oriented analysis, object-oriented design, and implementation.
+- Demonstrate the use of design goals to influence your design choices, assigning responsibilities carefully, using design patterns where appropriate, discussing trade-offs among alternative designs, and choosing an appropriate solution. The core logic of your solution must be testable and completely independent from your solution’s eventual graphical user interface (GUI).
+- Communicate design ideas clearly, including design documents that demonstrate fluency with the basic notation of UML class diagrams and interaction diagrams, the correct use of design vocabulary, and an appropriate level of formality in the specification of system behavior.
 
 ## Author's Note
 
