@@ -97,15 +97,15 @@ _I am planning to update this game in the near future to implement the undo and 
 
 ## Learning Goals
 - Demonstrate a comprehensive design and development process including object-oriented analysis, object-oriented design, and implementation.
-- Demonstrate the use of design goals to influence your design choices, assigning responsibilities carefully, using design patterns where appropriate, discussing trade-offs among alternative designs, and choosing an appropriate solution. The core logic of your solution must be testable and completely independent from your solution’s eventual graphical user interface (GUI).
+- Demonstrate the use of design goals to influence design choices, assigning responsibilities carefully, using design patterns where appropriate, discussing trade-offs among alternative designs, and choosing an appropriate solution. The core logic of the game is testable and completely independent from the graphical user interface (GUI).
 - Communicate design ideas clearly, including design documents that demonstrate fluency with the basic notation of UML class diagrams and interaction diagrams, the correct use of design vocabulary, and an appropriate level of formality in the specification of system behavior.
 
 ## Author's Note
 
-Santorini was a 17-214 class project that spanned 4 weeks.
+Santorini was a project that spanned 4 weeks.
 
 The first two weeks was a design challenge - considering design alternatives and tradeoffs - and was predominantly focused on backend development. This was one of the projects where I spent a lot of time thinking, planning, and drawing things on the whiteboard before I started coding.
 
-When I revisited Santorini for the remaining two weeks, we were tasked with building a playable frontend (sorry, not much time was spent on the frontend :') and extending our existing game with god cards, which was nightmarish. A large portion of my design had to be re-planned and re-factored to allow the game to coexist with the god cards. After the complete backend design overhaul, I implemented each god card and connected it with a frontend using Handlebars + React ([reference](https://github.com/CMU-17-214/s22-rec07-solution)).
+When I revisited Santorini for the remaining two weeks, I was tasked with building a playable frontend (sorry, not much time was spent on the frontend :') and extending the existing game with god cards, which was nightmarish. A large portion of my design had to be re-planned and re-factored to allow the game to coexist with the god cards. After the complete backend design overhaul, I implemented each god card and connected it with a frontend using Handlebars + React ([reference](https://github.com/CMU-17-214/s22-rec07-solution)).
 
 Santorini was a fun project for learning more about backend development, it's not simply just writing code, but truly understanding what is needed for our application and how to design + implement it. There is a lot of planning, considering alternatives + tradeoffs, and communicating with other for their feedback. I also spent a great deal of time following good coding practices such as code documentation, testing, encapsulation, polymorphism, exception handling, design patterns which is reflected in the code that I have written. Feel free to take a look at the source code and let me know if there's anything you would like me to elaborate on!
