@@ -1,26 +1,26 @@
 # Santorini
 
-## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
+## 📂 Table of Contents
+- [Overview](#-overview)
+- [Features](#-features)
   - [Basic Gameplay](#basic-gameplay)
   - [God Cards](#god-cards)
-- [Testing](#testing)
-- [How to run & play Santorini](#how-to-run--play-santorini)
+- [Testing](#-testing)
+- [How to run & play Santorini](#-how-to-run--play-santorini)
   - [Run/Start Commands](#runstart-commands)
   - [New Game](#new-game)
   - [Initializing Workers](#initializing-workers)
   - [Moving](#moving)
   - [Building](#building)
-- [Learning Goals](#learning-goals)
-- [Author's Note](#authors-note)
+- [Learning Goals](#-learning-goals)
+- [Author's Note](#%EF%B8%8F-authors-note)
 
-## Overview
+## 📖 Overview
 Santorini is a popular strategy board game where you play as a Greek God or Goddess and try to win it all by leveraging unique powers.
 
 Read more about the game's background and how it's played [here](https://roxley.com/products/santorini)!
 
-## Features
+## 🚀 Features
 
 ### Basic Gameplay
 
@@ -37,10 +37,10 @@ Read more about the game's background and how it's played [here](https://roxley.
 - [Demeter](https://www.youtube.com/watch?v=GSqdq7gSEjA)
   - Your Worker may build one additional time, but not on the same space.
 
-## Testing
+## 💻 Testing
 Achieved 100% code coverage using unit integration and functional tests.
 
-## How to run & play Santorini
+## 🎲 How to run & play Santorini
 
 ### Run/Start Commands
 
@@ -95,12 +95,12 @@ Additionally, to change and play with different God Cards, you will have to chan
 
 _I am planning to update this game in the near future to implement the undo and skip feature (using immutable board states) as well as implementing a frontend screen to handle assigning each player a god card. Stay tuned!_
 
-## Learning Goals
+## 📋 Learning Goals
 - Demonstrate a comprehensive design and development process including object-oriented analysis, object-oriented design, and implementation.
 - Demonstrate the use of design goals to influence design choices, assigning responsibilities carefully, using design patterns where appropriate, discussing trade-offs among alternative designs, and choosing an appropriate solution. The core logic of the game is testable and completely independent from the graphical user interface (GUI).
 - Communicate design ideas clearly, including design documents that demonstrate fluency with the basic notation of UML class diagrams and interaction diagrams, the correct use of design vocabulary, and an appropriate level of formality in the specification of system behavior.
 
-## Author's Note
+## ✍️ Author's Note
 
 Santorini was a project that spanned 4 weeks.
 
